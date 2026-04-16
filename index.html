@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minimal HTML Website</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at top, #0f172a 0%, #020617 55%);
+      color: #e2e8f0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+    .page {
+      width: min(100%, 760px);
+      padding: 2rem 2.5rem;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.88);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.25);
+      backdrop-filter: blur(18px);
+    }
+    h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      letter-spacing: -0.04em;
+    }
+    p {
+      margin: 0 0 1.5rem;
+      color: #cbd5e1;
+      max-width: 42rem;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.95rem 1.5rem;
+      border-radius: 999px;
+      border: none;
+      text-decoration: none;
+      font-weight: 700;
+      color: #0f172a;
+      background: #f8fafc;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+    }
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 36px rgba(15, 23, 42, 0.18);
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>Minimal HTML Website</h1>
+    <p>This is a compact, responsive static landing page built with a single HTML file and inline CSS. It is ready to publish as the root page of your site.</p>
+    <div class="buttons">
+      <a class="button" href="#">Get started</a>
+      <a class="button" href="#">Learn more</a>
+    </div>
+  </main>
+</body>
+</html>
