@@ -1,4 +1,0 @@
-# cbadarinza.github.io
-
-TETSJ
-
