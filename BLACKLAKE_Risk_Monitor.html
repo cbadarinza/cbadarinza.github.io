@@ -337,9 +337,83 @@
             border-left: 4px solid #c62828;
         }
 
+        .rank-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .rank-col-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4f46e5;
+            margin-bottom: 8px;
+        }
+
+        .rank-dropzone {
+            min-height: 340px;
+            border: 2px dashed rgba(79, 70, 229, 0.35);
+            border-radius: 10px;
+            padding: 10px;
+            background: #f8fafc;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .rank-dropzone.drag-over {
+            background: #eef2ff;
+            border-color: #4f46e5;
+        }
+
+        .rank-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: grab;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            user-select: none;
+        }
+
+        .rank-item:active {
+            cursor: grabbing;
+        }
+
+        .rank-item.dragging {
+            opacity: 0.4;
+        }
+
+        .rank-badge {
+            display: none;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #4f46e5;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 22px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .rank-list .rank-badge {
+            display: block;
+        }
+
         @media (max-width: 768px) {
             .content {
                 padding: 20px;
+            }
+
+            .rank-columns {
+                grid-template-columns: 1fr;
             }
 
             .risk-matrix {
@@ -364,7 +438,7 @@
     <div class="container">
         <div class="header">
             <h1>BLACKLAKE Strategic Real Estate Risk Monitor</h1>
-            <p>Wave 1 – Fragebogen & Forschungsdesign</p>
+            <p>Welle 1 – Fragebogen</p>
         </div>
 
         <div class="content">
@@ -374,13 +448,12 @@
 
             <!-- PART A: CONSENT -->
             <div class="section active" data-section="A">
-                <div class="section-title">Einleitung</div>
+                <div class="section-title">Teil A: Einleitung</div>
 
                 <div class="section-intro">
                     <p><strong>Sehr geehrte Damen und Herren,</strong></p>
-                    <p style="margin-top: 12px;">Die Immobilienwirtschaft agiert in einem Umfeld, das zunehmend von Entwicklungen außerhalb der Branche geprägt wird: geopolitische Verschiebungen, wirtschaftliche Unsicherheiten, technologische Umbrüche, regulatorische Eingriffe sowie gesellschaftliche und demografische Veränderungen.</p>
-                    <p style="margin-top: 12px;">Der BLACKLAKE Strategic Real Estate Risk Monitor soll einen systematischen Frühindikator für strategische Risiken der kommenden Jahre schaffen.</p>
-                    <p style="margin-top: 12px;">Welche externen Entwicklungen werden die Immobilienwirtschaft in den kommenden Jahren am stärksten beeinflussen, wann werden sie strategisch relevant und auf welche Entwicklungen ist die Branche bislang unzureichend vorbereitet?</p>
+                    <p style="margin-top: 12px;">Die Immobilienwirtschaft agiert in einem Umfeld, das zunehmend von Entwicklungen außerhalb der Branche geprägt wird: geopolitische Verschiebungen, wirtschaftliche Unsicherheiten, technologische Umbrüche, regulatorische Eingriffe sowie gesellschaftliche und demografische Veränderungen. Der BLACKLAKE Strategic Real Estate Risk Monitor soll einen systematischen Frühindikator für strategische Risiken der kommenden Jahre schaffen.</p>
+                    <p style="margin-top: 12px;">Welche externen Entwicklungen werden Ihr Haus/Unternehmen in den kommenden Jahren am stärksten beeinflussen? Wir sind an Ihrer persönlichen Einschätzung bzw. der Ihres Hauses interessiert, nicht an einer generellen Marktbewertung. Wir werden auch fragen, wann die Risiken strategisch relevant werden und auf welche Entwicklungen die Branche bislang unzureichend vorbereitet ist.</p>
                     <p style="margin-top: 12px;">Es gibt keine richtigen oder falschen Antworten. Uns interessiert Ihre persönliche Einschätzung, nicht die offizielle Position Ihres Hauses. Die Bearbeitung dauert etwa 15–20 Minuten.</p>
                 </div>
 
@@ -406,7 +479,7 @@
 
             <!-- PART B: PROFILE -->
             <div class="section" data-section="B">
-                <div class="section-title">Teil B: Über Sie</div>
+                <div class="section-title">Teil B: Profil und Akteursgruppe</div>
 
                 <div class="form-group">
                     <label>Welcher Akteursgruppe ordnen Sie Ihr Haus primär zu? <span class="required">*</span></label>
@@ -559,7 +632,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Welche Größenordnung hat das von Ihnen verantwortete Volumen?</label>
+                    <label>Welche Größenordnung hat das von Ihnen verantwortete Investmentvolumen (AUM)?</label>
                     <select name="P07">
                         <option value="">-- Bitte wählen --</option>
                         <option value="< 250 Mio.">&lt; 250 Mio. EUR</option>
@@ -569,6 +642,19 @@
                         <option value="> 20 Mrd.">&gt; 20 Mrd. EUR</option>
                         <option value="keine Angabe">Keine Angabe</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Welcher Anteil davon sind Immobilien?</label>
+                    <div class="slider-wrapper" style="max-width: 500px;">
+                        <input type="range" id="P07B_PCT_slider" name="P07B" min="0" max="100" step="1" value="0" data-initial="-1">
+                        <span class="slider-value" id="P07B_PCT_value" style="min-width: 45px;"></span>
+                    </div>
+                    <div class="scale-labels" style="max-width: 500px;">
+                        <span>0%</span>
+                        <span>50%</span>
+                        <span>100%</span>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -584,18 +670,44 @@
             </div>
 
             <!-- PART C: EXTERNAL RISK MAP -->
-            <div class="section" data-section="C">
+            <div class="section" data-section="C1">
                 <div class="section-title">Teil C: Externe strategische Risikofelder</div>
 
                 <div class="section-intro">
-                    <p>Im Folgenden bewerten Sie zehn externe strategische Risikofelder mit Blick auf die kommenden fünf Jahre bezogen auf die deutschsprachige Immobilienwirtschaft insgesamt.</p>
+                    <p>Im Folgenden bewerten Sie zehn externe strategische Risikofelder mit Blick auf die kommenden fünf Jahre, bezogen auf Ihr Haus/Unternehmen.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Bitte ordnen Sie die zehn Risikofelder zunächst nach ihrer strategischen Bedeutung für Ihr Haus. Ziehen Sie die Felder per Drag &amp; Drop von links in die rechte Liste (oben = am wichtigsten).</label>
+                    <div class="rank-columns">
+                        <div>
+                            <div class="rank-col-title">Risikofelder</div>
+                            <div id="rankPool" class="rank-dropzone rank-pool"></div>
+                        </div>
+                        <div>
+                            <div class="rank-col-title">Ihre Rangfolge</div>
+                            <div id="rankList" class="rank-dropzone rank-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART C2: RISK ASSESSMENT SLIDERS -->
+            <div class="section" data-section="C2">
+                <div class="section-title">Teil C: Bewertung der Risikofelder</div>
+
+                <div class="section-intro">
+                    <p>Bewerten Sie nun jedes Risikofeld auf drei Dimensionen. Die Reihenfolge entspricht Ihrer Rangfolge von der vorherigen Seite.</p>
+                    <p style="margin-top: 12px;"><strong>Eintrittswahrscheinlichkeit:</strong> Wie wahrscheinlich ist es, dass sich das Risikofeld innerhalb der kommenden fünf Jahre so zuspitzt, dass es für Ihr Haus einschneidend spürbar wird?</p>
+                    <p style="margin-top: 8px;"><strong>Impact:</strong> Angenommen, das Risiko tritt ein: Wie stark wären die Auswirkungen auf Ihr Haus?</p>
+                    <p style="margin-top: 8px;"><strong>Preparedness:</strong> Wie gut ist Ihr Haus auf dieses Risiko vorbereitet?</p>
                 </div>
 
                 <!-- Risk Fields will be generated by JavaScript -->
                 <div id="riskFieldsContainer"></div>
 
                 <div class="form-group" style="margin-top: 50px;">
-                    <label>Welche wesentlichen strategischen Risiken fehlen aus Ihrer Sicht?</label>
+                    <label>Persönliche Anmerkungen</label>
                     <textarea name="C04" placeholder="ca. 400 Zeichen"></textarea>
                 </div>
             </div>
@@ -605,7 +717,7 @@
                 <div class="section-title">Teil D: Wirkungsbereiche</div>
 
                 <div class="section-intro">
-                    <p>Welche Bereiche der Branche werden durch externe Entwicklungen besonders stark betroffen? Bitte markieren Sie pro Zeithorizont maximal 3 Bereiche.</p>
+                    <p>Welche Bereiche Ihres Portfolios werden aus Ihrer Sicht durch externe Entwicklungen besonders stark betroffen? Bitte markieren Sie pro Zeithorizont maximal 3 Bereiche.</p>
                 </div>
 
                 <!-- Impact areas will be generated by JavaScript -->
@@ -620,10 +732,11 @@
 
             <!-- PART F: FUTURE MOMENTUM -->
             <div class="section" data-section="F">
-                <div class="section-title">Teil F: Blick in die Zukunft</div>
+                <div class="section-title">Teil F: Blick auf die deutschsprachige Immobilienwirtschaft</div>
 
                 <div class="section-intro">
-                    <p>Beurteilen Sie für jeden Zeithorizont, welche Risiken gegenüber heute voraussichtlich an Bedeutung gewinnen bzw. verlieren.</p>
+                    <p>Wir kommen nun zur Branche: Teil F bezieht sich auf die deutschsprachige Immobilienwirtschaft insgesamt.</p>
+                    <p style="margin-top: 12px;">Beurteilen Sie für jeden Zeithorizont, welche Risiken gegenüber heute voraussichtlich an Bedeutung gewinnen bzw. verlieren.</p>
                 </div>
 
                 <div class="form-group">
@@ -744,14 +857,14 @@
 
                 <div class="form-group">
                     <label>Wie gut ist Ihr eigenes Haus im Vergleich zur Branche vorbereitet? <span class="required">*</span></label>
-                    <div class="slider-wrapper" style="max-width: 500px; margin: 0 auto;">
-                        <input type="range" id="G01_SELF_slider" name="G01" min="0" max="7" step="0.01" value="0" data-initial="0">
+                    <div class="slider-wrapper" style="max-width: 350px; margin: 0 auto;">
+                        <input type="range" id="G01_SELF_slider" name="G01" min="0" max="7" step="0.01" value="0" data-initial="-1">
                         <span class="slider-value" id="G01_SELF_value"></span>
                     </div>
-                    <div class="scale-labels" style="max-width: 500px; margin: 8px auto 0;">
-                        <span>deutlich schlechter</span>
+                    <div class="scale-labels" style="max-width: 350px; margin: 8px auto 0;">
+                        <span>deutlich weniger</span>
                         <span>etwa gleich</span>
-                        <span>deutlich besser</span>
+                        <span>deutlich mehr</span>
                     </div>
                 </div>
 
@@ -769,7 +882,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Welche Akteursgruppe ist am schlechtesten vorbereitet? <span class="required">*</span></label>
+                    <label>Welche Akteursgruppe ist am wenigsten vorbereitet? <span class="required">*</span></label>
                     <select name="G03" required>
                         <option value="">-- Bitte wählen --</option>
                         <option value="Kapital, Investment & Eigentum">Kapital, Investment &amp; Eigentum</option>
@@ -787,12 +900,12 @@
                 <div class="section-title">Teil H: Gesamteinschätzung</div>
 
                 <div class="form-group">
-                    <label>Gesamtrisikoniveau im Vergleich zu vor 12 Monaten? <span class="required">*</span></label>
-                    <div class="slider-wrapper" style="max-width: 500px; margin: 0 auto;">
-                        <input type="range" id="H01_RISK_slider" name="H01" min="0" max="7" step="0.01" value="0" data-initial="0">
+                    <label>Wie hat sich das Risk Sentiment (Empfinden) aus heutiger Sicht in den letzten 12 Monaten verändert (allgemein in der Branche)? <span class="required">*</span></label>
+                    <div class="slider-wrapper" style="max-width: 350px; margin: 0 auto;">
+                        <input type="range" id="H01_RISK_slider" name="H01" min="0" max="7" step="0.01" value="0" data-initial="-1">
                         <span class="slider-value" id="H01_RISK_value"></span>
                     </div>
-                    <div class="scale-labels" style="max-width: 500px; margin: 8px auto 0;">
+                    <div class="scale-labels" style="max-width: 350px; margin: 8px auto 0;">
                         <span>deutlich niedriger</span>
                         <span>unverändert</span>
                         <span>deutlich höher</span>
@@ -827,7 +940,7 @@
     </div>
 
     <script>
-        const sections = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'completion'];
+        const sections = ['A', 'B', 'C1', 'C2', 'D', 'E', 'F', 'G', 'H', 'completion'];
         const riskFields = [
             { code: 'GEO', name: 'Geopolitik', desc: 'Internationale militärische Konflikte, Handelskonflikte, geopolitische Machtverschiebungen' },
             { code: 'SEC', name: 'Sicherheit und Verteidigung', desc: 'Hybride Bedrohungen, Schutz kritischer Infrastruktur, verteidigungspolitische Entwicklungen' },
@@ -857,15 +970,30 @@
         let currentSection = 0;
         let formData = {};
 
+        function initFixedSliders() {
+            [['G01_SELF_slider', 'G01_SELF_value'], ['H01_RISK_slider', 'H01_RISK_value']].forEach(([sid, vid]) => {
+                const s = document.getElementById(sid);
+                const vs = document.getElementById(vid);
+                if (!s) return;
+                if (vs && vs.textContent === '') vs.textContent = '0.0';
+                s.classList.add('adjusted');
+                s.style.background = sliderTrackStyle(s);
+            });
+        }
+
         function initializeForm() {
             generateRiskFields();
             generateImpactMaps();
             generateFutureGain();
             generateFutureLoss();
+            generateRanking();
             setupP05b();
             setupMaxLimits();
             setupF03Text();
             loadFormData();
+            restoreRanking();
+            setupP07B();
+            initFixedSliders();
             updateP05bOptions();
             autoSaveOnChange();
             updateNavigation();
@@ -925,6 +1053,115 @@
                     }
                 });
             });
+        }
+
+        // ---- Teil C: manuelles Ranking per Drag & Drop (Variable C00_RANK) ----
+        function makeRankItem(risk) {
+            const el = document.createElement('div');
+            el.className = 'rank-item';
+            el.draggable = true;
+            el.dataset.code = risk.code;
+            el.innerHTML = `<span class="rank-badge"></span><span>${risk.name}</span>`;
+            el.addEventListener('dragstart', () => { window._dragItem = el; el.classList.add('dragging'); });
+            el.addEventListener('dragend', () => { el.classList.remove('dragging'); window._dragItem = null; updateRanking(); });
+            return el;
+        }
+
+        function setupDropzone(zone) {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                zone.classList.add('drag-over');
+                const item = window._dragItem;
+                if (!item) return;
+                const after = Array.from(zone.querySelectorAll('.rank-item:not(.dragging)'))
+                    .find(ch => e.clientY < ch.getBoundingClientRect().top + ch.getBoundingClientRect().height / 2);
+                if (after) zone.insertBefore(item, after); else zone.appendChild(item);
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+            zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); updateRanking(); });
+        }
+
+        // ---- Farbschemata der Slider ----
+        function riskTrackColor(v) {
+            // Teil C: einfarbige Skala je Wert, 0 = grün, 3.5 = amber, 7 = rot
+            const stops = [[52, 211, 153], [251, 191, 36], [248, 113, 113]];
+            const t = Math.max(0, Math.min(1, v / 7));
+            const seg = t < 0.5 ? 0 : 1;
+            const f = (t - seg * 0.5) / 0.5;
+            const a = stops[seg], b = stops[seg + 1];
+            const c = a.map((x, i) => Math.round(x + (b[i] - x) * f));
+            return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+        }
+
+        function sliderTrackStyle(slider) {
+            // Einheitliches Schema (wie Teil G): bei 0 grünlich, beim Schieben wandert amber -> rot
+            // Ausnahme Teil B (P07B): grau -> Buttonfarbe mit steigender Deckkraft
+            const v = parseFloat(slider.value);
+            const percent = (v / 7) * 100;
+            if (slider.name === 'P07B') {
+                return `linear-gradient(to right, #cccccc 0%, rgba(99, 102, 241, ${(v / 100).toFixed(2)}) 100%)`;
+            }
+            return `linear-gradient(to right, #f87171 0%, #fbbf24 ${percent}%, #34d399 100%)`;
+        }
+
+        function generateRanking() {
+            const pool = document.getElementById('rankPool');
+            pool.innerHTML = '';
+            riskFields.forEach(r => pool.appendChild(makeRankItem(r)));
+            setupDropzone(pool);
+            setupDropzone(document.getElementById('rankList'));
+        }
+
+        function updateRanking() {
+            const list = document.getElementById('rankList');
+            const order = Array.from(list.querySelectorAll('.rank-item')).map(el => el.dataset.code);
+            list.querySelectorAll('.rank-item').forEach((el, i) => {
+                el.querySelector('.rank-badge').textContent = i + 1;
+            });
+            formData['C00_RANK'] = order;
+            riskFields.forEach(r => {
+                const pos = order.indexOf(r.code);
+                formData[`C00_RANK_${r.code}`] = pos >= 0 ? pos + 1 : '';
+            });
+            localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+            reorderRiskTable(order);
+        }
+
+        function reorderRiskTable(order) {
+            const tbody = document.querySelector('.risk-table tbody');
+            if (!tbody) return;
+            const full = order.concat(riskFields.map(r => r.code).filter(c => !order.includes(c)));
+            full.forEach(code => {
+                const row = tbody.querySelector(`tr[data-code="${code}"]`);
+                if (row) tbody.appendChild(row);
+            });
+        }
+
+        function restoreRanking() {
+            const order = formData['C00_RANK'];
+            if (!order || !order.length) return;
+            const list = document.getElementById('rankList');
+            const pool = document.getElementById('rankPool');
+            order.forEach(code => {
+                const el = pool.querySelector(`.rank-item[data-code="${code}"]`);
+                if (el) list.appendChild(el);
+            });
+            updateRanking();
+        }
+
+        // ---- Teil B: P07B-Slider (0-100 %) ----
+        function setupP07B() {
+            const s = document.getElementById('P07B_PCT_slider');
+            if (!s) return;
+            const span = document.getElementById('P07B_PCT_value');
+            const render = () => {
+                const v = parseFloat(s.value);
+                span.textContent = Math.round(v) + '%';
+                s.classList.add('adjusted');
+                s.style.background = `linear-gradient(to right, #cccccc 0%, rgba(99, 102, 241, ${(v / 100).toFixed(2)}) 100%)`;
+            };
+            s.addEventListener('input', render);
+            render();
         }
 
         function generateRiskFields() {
@@ -1028,26 +1265,26 @@
 
             riskFields.forEach(risk => {
                 html += `
-                    <tr>
+                    <tr data-code="${risk.code}">
                         <td class="risk-name">
                             <strong>${risk.name}</strong>
                             <div style="font-size: 11px; color: #999; margin-top: 4px;">${risk.desc}</div>
                         </td>
                         <td class="slider-cell">
                             <div class="slider-wrapper">
-                                <input type="range" id="${risk.code}_PROB_slider" name="${risk.code}_PROB" min="0" max="7" step="0.01" value="0" data-type="prob" data-initial="0">
+                                <input type="range" id="${risk.code}_PROB_slider" name="${risk.code}_PROB" min="0" max="7" step="0.01" value="0" data-type="prob" data-initial="-1">
                                 <span class="slider-value" id="${risk.code}_PROB_value"></span>
                             </div>
                         </td>
                         <td class="slider-cell">
                             <div class="slider-wrapper">
-                                <input type="range" id="${risk.code}_IMP_slider" name="${risk.code}_IMP" min="0" max="7" step="0.01" value="0" data-type="imp" data-initial="0">
+                                <input type="range" id="${risk.code}_IMP_slider" name="${risk.code}_IMP" min="0" max="7" step="0.01" value="0" data-type="imp" data-initial="-1">
                                 <span class="slider-value" id="${risk.code}_IMP_value"></span>
                             </div>
                         </td>
                         <td class="slider-cell">
                             <div class="slider-wrapper">
-                                <input type="range" id="${risk.code}_PREP_slider" name="${risk.code}_PREP" min="0" max="7" step="0.01" value="0" data-type="prep" data-initial="0">
+                                <input type="range" id="${risk.code}_PREP_slider" name="${risk.code}_PREP" min="0" max="7" step="0.01" value="0" data-type="prep" data-initial="-1">
                                 <span class="slider-value" id="${risk.code}_PREP_value"></span>
                             </div>
                         </td>
@@ -1061,6 +1298,16 @@
             `;
 
             container.innerHTML = html;
+
+            // Teil-C-Slider: 0 ist der sichtbare Startwert (farbige Skala, Wert wird angezeigt)
+            document.querySelectorAll('.risk-table input[type="range"]').forEach(slider => {
+                const riskCode = slider.id.split('_')[0];
+                const metric = slider.id.split('_')[1];
+                const valueSpan = document.getElementById(`${riskCode}_${metric}_value`);
+                if (valueSpan) valueSpan.textContent = '0.0';
+                slider.classList.add('adjusted');
+                slider.style.background = sliderTrackStyle(slider);
+            });
 
             // Add slider event listeners
             document.querySelectorAll('input[type="range"]').forEach(slider => {
@@ -1080,9 +1327,7 @@
                     // Add adjusted class if value differs from initial
                     if (this.value !== initialValue) {
                         this.classList.add('adjusted');
-                        // Update gradient based on value (0-7)
-                        const percent = (this.value / 7) * 100;
-                        this.style.background = `linear-gradient(to right, #34d399 0%, #fbbf24 ${percent}%, #f87171 100%)`;
+                        this.style.background = sliderTrackStyle(this);
                     } else {
                         this.classList.remove('adjusted');
                         this.style.background = '#34d399';
@@ -1342,8 +1587,7 @@
 
                 if (this.value !== initialValue) {
                     this.classList.add('adjusted');
-                    const percent = (this.value / 7) * 100;
-                    this.style.background = `linear-gradient(to right, #34d399 0%, #fbbf24 ${percent}%, #f87171 100%)`;
+                    this.style.background = sliderTrackStyle(this);
                 } else {
                     this.classList.remove('adjusted');
                     this.style.background = '#cccccc';
@@ -1404,7 +1648,7 @@
                 html += `<div style="${cellStyle}">
                     <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Wie würde sich das Risiko entfalten?</label>
                     <div class="slider-wrapper">
-                        <input type="range" id="${risk.code}_SPD_slider" name="E_SPD_${risk.code}" min="0" max="7" step="0.01" value="0" data-initial="0">
+                        <input type="range" id="${risk.code}_SPD_slider" name="E_SPD_${risk.code}" min="0" max="7" step="0.01" value="0" data-initial="-1">
                         <span class="slider-value" id="${risk.code}_SPD_value"></span>
                     </div>
                     <div class="scale-labels">
@@ -1419,7 +1663,7 @@
                 html += `<div style="${cellStyle}">
                     <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Wie lange würden die Auswirkungen anhalten?</label>
                     <div class="slider-wrapper">
-                        <input type="range" id="${risk.code}_PER_slider" name="E_PER_${risk.code}" min="0" max="7" step="0.01" value="0" data-initial="0">
+                        <input type="range" id="${risk.code}_PER_slider" name="E_PER_${risk.code}" min="0" max="7" step="0.01" value="0" data-initial="-1">
                         <span class="slider-value" id="${risk.code}_PER_value"></span>
                     </div>
                     <div class="scale-labels">
@@ -1432,7 +1676,7 @@
             // Row 5: CH
             top3.forEach(risk => {
                 html += `<div style="${cellStyle}">
-                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Über welche Kanäle würde das Risiko besonders treffen? (Max. 4)</label>
+                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Welche Bereiche wären durch das Risiko besonders betroffen? (Max. 4)</label>
                     <div class="checkbox-group" style="gap: 4px;">
                         ${impactAreas.map((area, idx) => `
                             <div class="checkbox-option" style="padding: 4px;">
@@ -1459,6 +1703,15 @@
             // Attach handlers to new elements
             container.querySelectorAll('input[type="range"]').forEach(slider => {
                 attachSliderHandler(slider);
+                // 0 als sichtbarer Startwert
+                {
+                    const rc = slider.id.split('_')[0];
+                    const mt = slider.id.split('_')[1];
+                    const vs = document.getElementById(`${rc}_${mt}_value`);
+                    if (vs) vs.textContent = '0.0';
+                    slider.classList.add('adjusted');
+                    slider.style.background = sliderTrackStyle(slider);
+                }
                 // Restore saved value
                 const saved = formData[slider.name];
                 if (saved && saved !== '0') {
@@ -1587,12 +1840,10 @@
                                     valueSpan.textContent = parseFloat(formData[input.name]).toFixed(1);
                                 }
                             }
-                            // Add adjusted class if value differs from initial (0)
-                            if (formData[input.name] !== '0' && formData[input.name] !== 0) {
+                            // Add adjusted class if value differs from initial
+                            if (String(formData[input.name]) !== String(input.getAttribute('data-initial'))) {
                                 input.classList.add('adjusted');
-                                // Apply gradient based on saved value
-                                const percent = (formData[input.name] / 7) * 100;
-                                input.style.background = `linear-gradient(to right, #34d399 0%, #fbbf24 ${percent}%, #f87171 100%)`;
+                                input.style.background = sliderTrackStyle(input);
                             } else {
                                 input.style.background = '#cccccc';
                             }
