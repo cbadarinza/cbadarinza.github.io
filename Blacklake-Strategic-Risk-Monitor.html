@@ -951,7 +951,7 @@
                 <button class="btn-secondary" id="prevBtn" onclick="previousSection()">← Zurück</button>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <span id="navError" class="field-error" style="margin-top: 0;"></span>
-                    <button class="btn-secondary" onclick="resetForm()">Formular zurücksetzen</button>
+                    <button class="btn-secondary" id="resetBtn" onclick="resetForm()">Formular zurücksetzen</button>
                     <button class="btn-primary" id="nextBtn" onclick="nextSection()">Weiter →</button>
                 </div>
             </div>
@@ -1904,6 +1904,12 @@
 
             prevBtn.disabled = currentSection === 0;
             nextBtn.textContent = currentSection === sections.length - 1 ? 'Abschließen' : 'Weiter →';
+
+            // "Formular zurücksetzen" nach bestätigter Übermittlung ausblenden
+            const resetBtn = document.getElementById('resetBtn');
+            if (resetBtn) {
+                resetBtn.style.display = (currentSection === sections.length - 1 && submitState === 'success') ? 'none' : '';
+            }
 
             if (currentSection === sections.length - 1) {
                 // Abschlussseite: Schaltflächen hängen vom Übermittlungsstatus ab
