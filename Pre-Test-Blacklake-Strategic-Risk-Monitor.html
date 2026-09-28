@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blacklake Strategic Real Estate Risk Monitor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(160deg, #eceded 0%, #e2e2e6 55%, #d6d8dd 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(30, 32, 40, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #4f46e5;
+            padding-bottom: 15px;
+        }
+
+        .section-intro {
+            background: #f8fafc;
+            padding: 20px;
+            border-left: 4px solid #4f46e5;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .form-group {
+            margin-bottom: 35px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .form-group .required {
+            color: #e74c3c;
+        }
+
+        .content input[type="text"],
+        .content textarea,
+        .content select {
+            width: 100%;
+            padding: 8px 14px;
+            border: 1px solid rgba(79, 70, 229, 0.25);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #333;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 244, 255, 0.55) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 1px 3px rgba(79, 70, 229, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+
+        .content select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-right: 40px;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%234f46e5' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"), linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 244, 255, 0.55) 100%);
+            background-repeat: no-repeat, no-repeat;
+            background-position: right 14px center, 0 0;
+            background-size: 12px 8px, 100% 100%;
+        }
+
+        .content select:hover {
+            border-color: rgba(79, 70, 229, 0.5);
+            box-shadow: 0 3px 10px rgba(79, 70, 229, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .content input[type="text"]:focus,
+        .content textarea:focus,
+        .content select:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12), 0 2px 8px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .radio-option,
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 2px 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .radio-option:hover,
+        .checkbox-option:hover {
+            background: #f8fafc;
+        }
+
+        .radio-option input,
+        .checkbox-option input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+            pointer-events: auto;
+        }
+
+        .radio-option label,
+        .checkbox-option label {
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .scale-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .scale-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .scale-item input[type="radio"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+            margin-top: 8px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 2px rgba(30, 27, 75, 0.25);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #4f46e5 0%, #6d28d9 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(99, 102, 241, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #0ea5e9);
+            border-radius: 3px;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+            transition: width 0.3s;
+        }
+
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .risk-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .risk-card h3 {
+            font-size: 14px;
+            color: #4f46e5;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .completion-message {
+            text-align: center;
+            padding: 60px 30px;
+        }
+
+        .completion-message h2 {
+            color: #4f46e5;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        .completion-message p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .export-buttons button {
+            margin: 0 5px;
+        }
+
+        .field-error {
+            display: none;
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c62828;
+        }
+
+        .rank-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .rank-col-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4f46e5;
+            margin-bottom: 8px;
+        }
+
+        .rank-dropzone {
+            min-height: 340px;
+            border: 2px dashed rgba(79, 70, 229, 0.35);
+            border-radius: 10px;
+            padding: 10px;
+            background: #f8fafc;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .rank-dropzone.drag-over {
+            background: #eef2ff;
+            border-color: #4f46e5;
+        }
+
+        .rank-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: grab;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            user-select: none;
+        }
+
+        .rank-item:active {
+            cursor: grabbing;
+        }
+
+        .rank-item.dragging {
+            opacity: 0.4;
+        }
+
+        .rank-badge {
+            display: none;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #4f46e5;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 22px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .rank-list .rank-badge {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .rank-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .risk-matrix {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Blacklake Strategic Real Estate Risk Monitor</h1>
+            <p>Pre-Test – Fragebogen</p>
+        </div>
+
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- PART A: CONSENT -->
+            <div class="section active" data-section="A">
+                <div class="section-title">Teil A: Einleitung</div>
+
+                <div class="section-intro">
+                    <p><strong>Sehr geehrte Damen und Herren,</strong></p>
+                    <p style="margin-top: 12px;">Die Immobilienwirtschaft agiert in einem Umfeld, das zunehmend von Entwicklungen außerhalb der Branche geprägt wird: geopolitische Verschiebungen, wirtschaftliche Unsicherheiten, technologische Umbrüche, regulatorische Eingriffe sowie gesellschaftliche und demografische Veränderungen. Der Blacklake Strategic Real Estate Risk Monitor soll einen systematischen Frühindikator für strategische Risiken der kommenden Jahre schaffen.</p>
+                    <p style="margin-top: 12px;">Welche externen Entwicklungen werden Ihr Haus/Unternehmen in den kommenden Jahren am stärksten beeinflussen? Wir sind an Ihrer persönlichen Einschätzung interessiert, nicht an einer generellen Marktbewertung. Wir werden auch fragen, wann die Risiken strategisch relevant werden und auf welche Entwicklungen die Branche bislang unzureichend vorbereitet ist.</p>
+                    <p style="margin-top: 12px;">Es gibt keine richtigen oder falschen Antworten. Uns interessiert Ihre persönliche Einschätzung, nicht die offizielle Position Ihres Hauses. Die Bearbeitung dauert etwa 15–20 Minuten.</p>
+                    <p style="margin-top: 12px;">Ihre Angaben werden streng vertraulich behandelt und ausschließlich anonymisiert ausgewertet, sodass keine Rückschlüsse auf Ihr Unternehmen möglich sind.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Zugangscode</label>
+                    <input type="text" name="ACCESS_CODE" id="accessCode" placeholder="Bitte geben Sie Ihren Zugangscode ein" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label>Stimmen Sie einer Teilnahme zu? <span class="required">*</span></label>
+                    <div class="radio-group" style="pointer-events: auto;">
+                        <div class="radio-option" onclick="document.getElementById('consent_yes').click()">
+                            <input type="radio" id="consent_yes" name="A01" value="Ja">
+                            <label for="consent_yes">Ja</label>
+                        </div>
+                        <div class="radio-option" onclick="document.getElementById('consent_no').click()">
+                            <input type="radio" id="consent_no" name="A01" value="Nein">
+                            <label for="consent_no">Nein</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART B: PROFILE -->
+            <div class="section" data-section="B">
+                <div class="section-title">Teil B: Profil und Akteursgruppe</div>
+
+                <div class="form-group">
+                    <label>Welcher Akteursgruppe ordnen Sie Ihr Haus primär zu? <span class="required">*</span></label>
+                    <select name="P01" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="Institutioneller Investor">Institutioneller Investor / Eigentümer</option>
+                        <option value="Asset Manager">Investment-, Fonds- oder Asset Manager</option>
+                        <option value="Immobilienunternehmen">Immobilienunternehmen / Bestandshalter / REIT / Wohnungsunternehmen</option>
+                        <option value="Family Office">Family Office / privater bzw. unternehmerischer Investor</option>
+                        <option value="Projektentwickler">Projektentwickler / Bauträger</option>
+                        <option value="Bauunternehmen">Bauunternehmen / Generalunternehmer</option>
+                        <option value="Bank">Bank / Finanzierer / Debt Fund / alternativer Kreditgeber</option>
+                        <option value="Nutzer">Nutzer / Betreiber / Corporate Real Estate</option>
+                        <option value="Property Management">Property / Facility / Technical Management</option>
+                        <option value="Beratung">Beratung / Makler / Bewertung / Wirtschaftsprüfung / Rechtsberatung</option>
+                        <option value="Dienstleister">Technologie-, Daten- oder sonstiger Dienstleister</option>
+                        <option value="Wissenschaft">Wissenschaft / Forschung</option>
+                        <option value="Politik">Politik</option>
+                        <option value="Verwaltung">Verwaltung</option>
+                        <option value="Aufsicht">Aufsicht</option>
+                        <option value="Verband">Verband / Verein</option>
+                        <option value="Sonstiges">Sonstiges</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Welche Position bekleiden Sie? <span class="required">*</span></label>
+                    <select name="P02" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="Vorstand">Vorstand / Geschäftsführung / Managing Partner</option>
+                        <option value="Aufsichtsrat">Aufsichtsrat / Beirat / Verwaltungsrat</option>
+                        <option value="Bereichsleitung">Bereichsleitung / erste Ebene unter Geschäftsführung</option>
+                        <option value="Director">Partner / Director / Senior Advisor</option>
+                        <option value="Professur">Professur / wissenschaftliche Leitung</option>
+                        <option value="Sonstige">Sonstige</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Wie viele Jahre sind Sie in der Immobilienwirtschaft tätig? <span class="required">*</span></label>
+                    <select name="P03" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="< 10">< 10 Jahre</option>
+                        <option value="10-19">10–19 Jahre</option>
+                        <option value="20-29">20–29 Jahre</option>
+                        <option value="30+">30+ Jahre</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Auf welche Region bezieht sich Ihre Tätigkeit überwiegend? <span class="required">*</span></label>
+                    <select name="P04" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="Deutschland">Deutschland</option>
+                        <option value="DACH">DACH</option>
+                        <option value="Europa">Europa</option>
+                        <option value="Global">Global</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Welche Funktionen der Wertschöpfungskette verantworten Sie? (Mehrfachauswahl)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P05_invest" name="P05" value="Investment Management und Transaktion">
+                            <label for="P05_invest">Investment Management und Transaktion</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P05_asset" name="P05" value="Asset Management">
+                            <label for="P05_asset">Asset Management</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P05_projekt" name="P05" value="Projektentwicklung und Bau">
+                            <label for="P05_projekt">Projektentwicklung und Bau</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P05_finanz" name="P05" value="Finanzierung und Kapitalmarkt">
+                            <label for="P05_finanz">Finanzierung und Kapitalmarkt</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P05_portfolio" name="P05" value="Portfoliomanagement und Strategie">
+                            <label for="P05_portfolio">Portfoliomanagement und Strategie</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P05_property" name="P05" value="Property / Facility / Technical Management">
+                            <label for="P05_property">Property / Facility / Technical Management</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P05_nutzung" name="P05" value="Nutzung / Corporate Real Estate / Betreiberfunktion">
+                            <label for="P05_nutzung">Nutzung / Corporate Real Estate / Betreiberfunktion</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P05_beratung" name="P05" value="Beratung / Bewertung / Research">
+                            <label for="P05_beratung">Beratung / Bewertung / Research</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P05_fuehrung" name="P05" value="Unternehmensführung ohne funktionalen Schwerpunkt">
+                            <label for="P05_fuehrung">Unternehmensführung ohne funktionalen Schwerpunkt</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P05_ueberwachung" name="P05" value="Überwachung / Steuerung">
+                            <label for="P05_ueberwachung">Überwachung / Steuerung</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Welche dieser Funktionen bildet Ihren primären Verantwortungsbereich?</label>
+                    <select name="P05b" id="P05bSelect">
+                        <option value="">-- Bitte wählen Sie zuerst Funktionen oben aus --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>In welchen Nutzungsarten sind Sie schwerpunktmäßig aktiv? (Max. 3)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P06_wohnen" name="P06" value="Wohnen">
+                            <label for="P06_wohnen">Wohnen</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P06_buero" name="P06" value="Büro">
+                            <label for="P06_buero">Büro</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P06_einzelhandel" name="P06" value="Einzelhandel">
+                            <label for="P06_einzelhandel">Einzelhandel</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P06_logistik" name="P06" value="Logistik">
+                            <label for="P06_logistik">Logistik und Industrie</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P06_hotel" name="P06" value="Hotel">
+                            <label for="P06_hotel">Hotel und Betreiberimmobilien</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P06_healthcare" name="P06" value="Healthcare">
+                            <label for="P06_healthcare">Healthcare und Sozialimmobilien</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P06_rechenzentren" name="P06" value="Rechenzentren">
+                            <label for="P06_rechenzentren">Rechenzentren und Infrastruktur</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="P06_uebergreifend" name="P06" value="Übergreifend">
+                            <label for="P06_uebergreifend">Nutzungsartenübergreifend</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Welche Größenordnung hat das von Ihnen verantwortete Investmentvolumen (AUM)?</label>
+                    <select name="P07">
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="< 250 Mio.">&lt; 250 Mio. EUR</option>
+                        <option value="250 Mio. - 1 Mrd.">250 Mio. – 1 Mrd. EUR</option>
+                        <option value="1 - 5 Mrd.">1 – 5 Mrd. EUR</option>
+                        <option value="5 - 20 Mrd.">5 – 20 Mrd. EUR</option>
+                        <option value="> 20 Mrd.">&gt; 20 Mrd. EUR</option>
+                        <option value="keine Angabe">Keine Angabe</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Welcher Anteil davon sind Immobilien?</label>
+                    <div class="slider-wrapper" style="max-width: 500px;">
+                        <input type="range" id="P07B_PCT_slider" name="P07B" min="0" max="100" step="1" value="0" data-initial="-1">
+                        <span class="slider-value" id="P07B_PCT_value" style="min-width: 45px;"></span>
+                    </div>
+                    <div class="scale-labels" style="max-width: 500px;">
+                        <span>0%</span>
+                        <span>50%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>In welcher Rolle tragen Sie überwiegend Risiko? <span class="required">*</span></label>
+                    <select name="P08" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="Eigenkapitalseite">Eigenkapitalseite</option>
+                        <option value="Fremdkapitalseite">Fremdkapitalseite</option>
+                        <option value="beides">Beides</option>
+                        <option value="weder noch">Weder noch</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- PART C: EXTERNAL RISK MAP -->
+            <div class="section" data-section="C1">
+                <div class="section-title">Teil C: Externe strategische Risikofelder</div>
+
+                <div class="section-intro">
+                    <p>Im Folgenden bewerten Sie zehn externe strategische Risikofelder mit Blick auf die kommenden fünf Jahre, bezogen auf Ihr Haus/Unternehmen.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Bitte ordnen Sie die zehn Risikofelder zunächst nach ihrer strategischen Bedeutung für Ihr Haus. Ziehen Sie die Felder per Drag &amp; Drop von links in die rechte Liste (oben = am wichtigsten).</label>
+                    <div class="rank-columns">
+                        <div>
+                            <div class="rank-col-title">Risikofelder</div>
+                            <div id="rankPool" class="rank-dropzone rank-pool"></div>
+                        </div>
+                        <div>
+                            <div class="rank-col-title">Ihre Rangfolge</div>
+                            <div id="rankList" class="rank-dropzone rank-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART C2: RISK ASSESSMENT SLIDERS -->
+            <div class="section" data-section="C2">
+                <div class="section-title">Teil C: Bewertung der Risikofelder</div>
+
+                <div class="section-intro">
+                    <p>Bewerten Sie nun jedes Risikofeld in den folgenden drei Dimensionen. Die Reihenfolge entspricht Ihrer Rangfolge von der vorherigen Seite.</p>
+                    <p style="margin-top: 12px;"><strong>Eintrittswahrscheinlichkeit:</strong> Wie wahrscheinlich ist es, dass sich das Risikofeld innerhalb der kommenden fünf Jahre so zuspitzt, dass es für Ihr Haus einschneidend spürbar wird?</p>
+                    <p style="margin-top: 8px;"><strong>Impact:</strong> Angenommen, das Risiko tritt ein: Wie stark wären die Auswirkungen auf Ihr Haus?</p>
+                    <p style="margin-top: 8px;"><strong>Preparedness:</strong> Wie gut ist Ihr Haus auf dieses Risiko vorbereitet?</p>
+                </div>
+
+                <!-- Risk Fields will be generated by JavaScript -->
+                <div id="riskFieldsContainer"></div>
+
+                <div class="form-group" style="margin-top: 50px;">
+                    <label>Persönliche Anmerkungen</label>
+                    <textarea name="C04" placeholder="ca. 400 Zeichen"></textarea>
+                </div>
+            </div>
+
+            <!-- PART D: REAL ESTATE IMPACT MAP -->
+            <div class="section" data-section="D">
+                <div class="section-title">Teil D: Wirkungsbereiche</div>
+
+                <div class="section-intro">
+                    <p>Welche Bereiche Ihres Portfolios werden aus Ihrer Sicht durch externe Entwicklungen besonders stark betroffen? Bitte markieren Sie pro Zeithorizont maximal 3 Bereiche.</p>
+                </div>
+
+                <!-- Impact areas will be generated by JavaScript -->
+                <div id="impactContainer"></div>
+            </div>
+
+            <!-- PART E: TOP-3 DEEP DIVE -->
+            <div class="section" data-section="E">
+                <div class="section-title">Teil E: Vertiefung der drei relevantesten Risikofelder</div>
+                <div id="teilEContainer"></div>
+            </div>
+
+            <!-- PART F: FUTURE MOMENTUM -->
+            <div class="section" data-section="F">
+                <div class="section-title">Teil F: Blick auf die deutschsprachige Immobilienwirtschaft</div>
+
+                <div class="section-intro">
+                    <p>Perspektivenwechsel: Wir kommen nun zur Immobilenbranche. Teil F bezieht sich auf die deutschsprachige Immobilienwirtschaft insgesamt.</p>
+                    <p style="margin-top: 12px;">Beurteilen Sie für jeden Zeithorizont, welche Risiken gegenüber heute voraussichtlich an Bedeutung gewinnen bzw. verlieren.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Welche Risikofelder werden für die deutschsprachige Immobilienwirtschaft an Bedeutung  <em>gewinnen</em>? (Max. 3 pro Horizont)</label>
+                </div>
+
+                <!-- Future momentum will be generated by JavaScript -->
+                <div id="futureGainContainer"></div>
+
+                <div class="form-group" style="margin-top: 40px;">
+                    <label>Welche Risikofelder werden für die deutschsprachige Immobilienwirtschaft an Bedeutung <em>verlieren</em>? (Max. 3 pro Horizont)</label>
+                </div>
+
+                <div id="futureLossContainer"></div>
+
+                <div class="form-group" style="margin-top: 40px;">
+                    <label>Welches Risikofeld wird <em>unterschätzt</em>? <span class="required">*</span></label>
+                    <select name="F03" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="Geopolitik">Geopolitik</option>
+                        <option value="Sicherheit">Sicherheit und Verteidigung</option>
+                        <option value="Volkswirtschaft">Volkswirtschaft und Konjunktur</option>
+                        <option value="Kapitalmarkt">Kapitalmarkt</option>
+                        <option value="Technologie">Technologie und Künstliche Intelligenz</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="Energieversorgung">Energieversorgung</option>
+                        <option value="Nachhaltigkeit">Nachhaltigkeit und Klima</option>
+                        <option value="Regulierung">Regulierung</option>
+                        <option value="Demografie">Demografie und Gesellschaft</option>
+                        <option value="Andere">Ein hier nicht genanntes Risiko</option>
+                    </select>
+                    <input type="text" name="F03_TXT" id="F03Text" placeholder="Welches Risiko?" style="display: none; margin-top: 10px;"
+                        onfocus="void(0)">
+                </div>
+
+                <div class="form-group">
+                    <label>Welches Risikofeld wird <em>überschätzt</em>? <span class="required">*</span></label>
+                    <select name="F04" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="Geopolitik">Geopolitik</option>
+                        <option value="Sicherheit">Sicherheit und Verteidigung</option>
+                        <option value="Volkswirtschaft">Volkswirtschaft und Konjunktur</option>
+                        <option value="Kapitalmarkt">Kapitalmarkt</option>
+                        <option value="Technologie">Technologie und Künstliche Intelligenz</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="Energieversorgung">Energieversorgung</option>
+                        <option value="Nachhaltigkeit">Nachhaltigkeit und Klima</option>
+                        <option value="Regulierung">Regulierung</option>
+                        <option value="Demografie">Demografie und Gesellschaft</option>
+                        <option value="Keine">Keines</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Welche neue Entwicklung könnte strategisch relevant werden?</label>
+                    <textarea name="F05" placeholder="ca. 400 Zeichen"></textarea>
+                </div>
+
+                <div class="form-group" style="margin-top: 40px;">
+                    <label>Chancenperspektive: Welche der genannten Entwicklungen eröffnet der Immobilienwirtschaft trotz der damit verbundenen Risiken aus Ihrer Sicht die größten strategischen Chancen? (Max. 3)</label>
+                    <div class="checkbox-group" id="F06Group">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_geo" name="F06" value="Geopolitik">
+                            <label for="F06_geo">Geopolitik</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_sec" name="F06" value="Sicherheit und Verteidigung">
+                            <label for="F06_sec">Sicherheit und Verteidigung</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_mak" name="F06" value="Volkswirtschaft und Konjunktur">
+                            <label for="F06_mak">Volkswirtschaft und Konjunktur</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_cap" name="F06" value="Kapitalmarkt">
+                            <label for="F06_cap">Kapitalmarkt</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_tec" name="F06" value="Technologie und Künstliche Intelligenz">
+                            <label for="F06_tec">Technologie und Künstliche Intelligenz</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_cyb" name="F06" value="Cybersecurity">
+                            <label for="F06_cyb">Cybersecurity</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_ene" name="F06" value="Energieversorgung">
+                            <label for="F06_ene">Energieversorgung</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_esg" name="F06" value="Nachhaltigkeit und Klima">
+                            <label for="F06_esg">Nachhaltigkeit und Klima</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_reg" name="F06" value="Regulierung">
+                            <label for="F06_reg">Regulierung</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_dem" name="F06" value="Demografie und Gesellschaft">
+                            <label for="F06_dem">Demografie und Gesellschaft</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="F06_andere" name="F06" value="Andere Entwicklung">
+                            <label for="F06_andere">Andere Entwicklung</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Worin liegt aus Ihrer Sicht die wichtigste strategische Chance?</label>
+                    <textarea name="F07" placeholder="ca. 300 Zeichen"></textarea>
+                </div>
+            </div>
+
+            <!-- PART G: PREPAREDNESS -->
+            <div class="section" data-section="G">
+                <div class="section-title">Teil G: Vorbereitung und Vergleich</div>
+
+                <div class="form-group">
+                    <label>Wie gut ist Ihr eigenes Haus im Vergleich zur Branche vorbereitet? <span class="required">*</span></label>
+                    <div class="slider-wrapper" style="max-width: 350px; margin: 0 auto;">
+                        <input type="range" id="G01_SELF_slider" name="G01" min="0" max="7" step="0.01" value="0" data-initial="-1">
+                        <span class="slider-value" id="G01_SELF_value"></span>
+                    </div>
+                    <div class="scale-labels" style="max-width: 350px; margin: 8px auto 0;">
+                        <span>deutlich weniger</span>
+                        <span>etwa gleich</span>
+                        <span>deutlich mehr</span>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 40px;">
+                    <label>Welche Akteursgruppe der Immobilienwirtschaft ist Ihrer Einschätzung nach am besten auf die kommenden Risiken vorbereitet? <span class="required">*</span></label>
+                    <select name="G02" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="Kapital, Investment & Eigentum">Kapital, Investment &amp; Eigentum</option>
+                        <option value="Entwicklung & Bau">Entwicklung &amp; Bau</option>
+                        <option value="Finanzierung & Risiko">Finanzierung &amp; Risiko</option>
+                        <option value="Nutzer & Betrieb">Nutzer &amp; Betrieb</option>
+                        <option value="Beratung & Marktdienstleistungen">Beratung &amp; Marktdienstleistungen</option>
+                        <option value="Institutionelles Umfeld">Institutionelles Umfeld</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Welche Akteursgruppe ist am wenigsten vorbereitet? <span class="required">*</span></label>
+                    <select name="G03" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="Kapital, Investment & Eigentum">Kapital, Investment &amp; Eigentum</option>
+                        <option value="Entwicklung & Bau">Entwicklung &amp; Bau</option>
+                        <option value="Finanzierung & Risiko">Finanzierung &amp; Risiko</option>
+                        <option value="Nutzer & Betrieb">Nutzer &amp; Betrieb</option>
+                        <option value="Beratung & Marktdienstleistungen">Beratung &amp; Marktdienstleistungen</option>
+                        <option value="Institutionelles Umfeld">Institutionelles Umfeld</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- PART H: OVERALL ASSESSMENT -->
+            <div class="section" data-section="H">
+                <div class="section-title">Teil H: Gesamteinschätzung</div>
+
+                <div class="form-group">
+                    <label>Wie hat sich das allgemeine Risikoempfinden in der Branche (Risk Sentiment) in den letzten 12 Monaten verändert? <span class="required">*</span></label>
+                    <div class="slider-wrapper" style="max-width: 350px; margin: 0 auto;">
+                        <input type="range" id="H01_RISK_slider" name="H01" min="0" max="7" step="0.01" value="0" data-initial="-1">
+                        <span class="slider-value" id="H01_RISK_value"></span>
+                    </div>
+                    <div class="scale-labels" style="max-width: 350px; margin: 8px auto 0;">
+                        <span>deutlich niedriger</span>
+                        <span>unverändert</span>
+                        <span>deutlich höher</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Ihre wichtigste Botschaft an die Branche (ein Satz):</label>
+                    <textarea name="H02" placeholder="ca. 200 Zeichen"></textarea>
+                </div>
+            </div>
+
+            <!-- COMPLETION -->
+            <div class="section" data-section="completion">
+                <div class="completion-message" id="completionSaving">
+                    <h2>Ihre Antworten werden übermittelt …</h2>
+                    <p>Bitte schließen Sie dieses Fenster noch nicht.</p>
+                </div>
+                <div class="completion-message" id="completionSuccess" style="display: none;">
+                    <h2>✓ Vielen Dank!</h2>
+                    <p>Ihre Antworten wurden erfolgreich gespeichert.</p>
+                    <p>Die Ergebnisse werden nach Abschluss der Erhebung gemäß den datenschutzrechtlichen Vorgaben behandelt.</p>
+                </div>
+                <div class="completion-message" id="completionError" style="display: none;">
+                    <h2>Übermittlung fehlgeschlagen</h2>
+                    <p>Ihre Antworten sind auf diesem Gerät zwischengespeichert und gehen nicht verloren. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</p>
+                    <p id="completionErrorDetail" style="font-size: 13px; color: #888;"></p>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                        <button class="btn-primary" onclick="submitResponses()">Erneut senden</button>
+                        <button class="btn-secondary" onclick="downloadJSON()">Antworten als Datei sichern</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="navigation">
+                <button class="btn-secondary" id="prevBtn" onclick="previousSection()">← Zurück</button>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span id="navError" class="field-error" style="margin-top: 0;"></span>
+                    <button class="btn-secondary" id="resetBtn" onclick="resetForm()">Formular zurücksetzen</button>
+                    <button class="btn-primary" id="nextBtn" onclick="nextSection()">Weiter →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sections = ['A', 'B', 'C1', 'C2', 'D', 'E', 'F', 'G', 'H', 'completion'];
+        const riskFields = [
+            { code: 'GEO', name: 'Geopolitik', desc: 'Internationale militärische Konflikte, Handelskonflikte, geopolitische Machtverschiebungen' },
+            { code: 'SEC', name: 'Sicherheit und Verteidigung', desc: 'Hybride Bedrohungen, Schutz kritischer Infrastruktur, verteidigungspolitische Entwicklungen' },
+            { code: 'MAK', name: 'Volkswirtschaft und Konjunktur', desc: 'Wachstum, Inflation, Arbeitsmarkt, Rezessionsrisiken' },
+            { code: 'CAP', name: 'Kapitalmarkt', desc: 'Zinsen, Finanzierungskosten, Liquidität, Kapitalverfügbarkeit' },
+            { code: 'TEC', name: 'Technologie und Künstliche Intelligenz', desc: 'Automatisierung, KI-Transformation, digitale Disruption von Geschäftsmodellen' },
+            { code: 'CYB', name: 'Cybersecurity', desc: 'Cyberangriffe, Datenrisiken, digitale Resilienz' },
+            { code: 'ENE', name: 'Energieversorgung', desc: 'Energiepreise, Versorgungssicherheit, Netz- und Anschlussinfrastruktur' },
+            { code: 'ESG', name: 'Nachhaltigkeit und Klima', desc: 'Physische Klimarisiken, ESG-Anforderungen, Dekarbonisierungspfade' },
+            { code: 'REG', name: 'Regulierung', desc: 'Steuerrecht, Aufsichtsrecht, Nachhaltigkeits- und Baurecht' },
+            { code: 'DEM', name: 'Demografie und Gesellschaft', desc: 'Bevölkerungsentwicklung, Migration, Arbeitswelt, Nutzerverhalten' }
+        ];
+
+        const impactAreas = [
+            'Immobilienwerte und Bewertungsniveaus',
+            'Nutzernachfrage und Vermietungsmarkt',
+            'Verfügbarkeit und Kosten der Finanzierung',
+            'Liquidität und Funktionsfähigkeit der Transaktionsmärkte',
+            'Baukosten und Materialverfügbarkeit',
+            'Sanierungs- und Modernisierungsfähigkeit des Bestands',
+            'Betriebskosten und Bewirtschaftung',
+            'Versicherbarkeit von Objekten',
+            'Verfügbarkeit qualifizierter Mitarbeiter',
+            'Genehmigungs- und Planungsprozesse'
+        ];
+
+        let currentSection = 0;
+        let formData = {};
+
+        function initFixedSliders() {
+            [['G01_SELF_slider', 'G01_SELF_value'], ['H01_RISK_slider', 'H01_RISK_value']].forEach(([sid, vid]) => {
+                const s = document.getElementById(sid);
+                const vs = document.getElementById(vid);
+                if (!s) return;
+                if (vs && vs.textContent === '') vs.textContent = '0.0';
+                s.classList.add('adjusted');
+                s.style.background = sliderTrackStyle(s);
+            });
+        }
+
+        function initializeForm() {
+            generateRiskFields();
+            generateImpactMaps();
+            generateFutureGain();
+            generateFutureLoss();
+            generateRanking();
+            setupP05b();
+            setupMaxLimits();
+            setupF03Text();
+            loadFormData();
+            ensureClientId();
+            restoreRanking();
+            setupP07B();
+            initFixedSliders();
+            updateP05bOptions();
+            autoSaveOnChange();
+            updateNavigation();
+            updateProgress();
+        }
+
+        function updateP05bOptions() {
+            const select = document.getElementById('P05bSelect');
+            const checked = Array.from(document.querySelectorAll('input[name="P05"]:checked')).map(cb => cb.value);
+            const currentValue = formData['P05b'] || select.value;
+
+            if (checked.length === 0) {
+                select.innerHTML = '<option value="">-- Bitte wählen Sie zuerst Funktionen oben aus --</option>';
+                return;
+            }
+
+            select.innerHTML = '<option value="">-- Bitte wählen --</option>' +
+                checked.map(v => `<option value="${v}">${v}</option>`).join('');
+
+            if (checked.includes(currentValue)) {
+                select.value = currentValue;
+            }
+        }
+
+        function setupP05b() {
+            document.querySelectorAll('input[name="P05"]').forEach(cb => {
+                cb.addEventListener('change', updateP05bOptions);
+            });
+        }
+
+        function setupF03Text() {
+            const select = document.querySelector('select[name="F03"]');
+            const textField = document.getElementById('F03Text');
+            const toggle = () => {
+                textField.style.display = select.value === 'Andere' ? 'block' : 'none';
+            };
+            select.addEventListener('change', toggle);
+            toggle();
+        }
+
+        function setupMaxLimits() {
+            // P06: max 3 Nutzungsarten
+            document.querySelectorAll('input[name="P06"]').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    if (document.querySelectorAll('input[name="P06"]:checked').length > 3) {
+                        this.checked = false;
+                        showNavError('Maximum 3 Nutzungsarten erlaubt.');
+                    }
+                });
+            });
+            // F06: max 3 Chancen
+            document.querySelectorAll('input[name="F06"]').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    if (document.querySelectorAll('input[name="F06"]:checked').length > 3) {
+                        this.checked = false;
+                        showNavError('Maximum 3 Entwicklungen erlaubt.');
+                    }
+                });
+            });
+        }
+
+        // ---- Teil C: manuelles Ranking per Drag & Drop (Variable C00_RANK) ----
+        function makeRankItem(risk) {
+            const el = document.createElement('div');
+            el.className = 'rank-item';
+            el.draggable = true;
+            el.dataset.code = risk.code;
+            el.innerHTML = `<span class="rank-badge"></span><span>${risk.name}</span>`;
+            el.addEventListener('dragstart', () => { window._dragItem = el; el.classList.add('dragging'); });
+            el.addEventListener('dragend', () => { el.classList.remove('dragging'); window._dragItem = null; updateRanking(); });
+            return el;
+        }
+
+        function setupDropzone(zone) {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                zone.classList.add('drag-over');
+                const item = window._dragItem;
+                if (!item) return;
+                const after = Array.from(zone.querySelectorAll('.rank-item:not(.dragging)'))
+                    .find(ch => e.clientY < ch.getBoundingClientRect().top + ch.getBoundingClientRect().height / 2);
+                if (after) zone.insertBefore(item, after); else zone.appendChild(item);
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+            zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); updateRanking(); });
+        }
+
+        // ---- Farbschemata der Slider ----
+        function riskTrackColor(v) {
+            // Teil C: einfarbige Skala je Wert, 0 = grün, 3.5 = amber, 7 = rot
+            const stops = [[52, 211, 153], [251, 191, 36], [248, 113, 113]];
+            const t = Math.max(0, Math.min(1, v / 7));
+            const seg = t < 0.5 ? 0 : 1;
+            const f = (t - seg * 0.5) / 0.5;
+            const a = stops[seg], b = stops[seg + 1];
+            const c = a.map((x, i) => Math.round(x + (b[i] - x) * f));
+            return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+        }
+
+        function sliderTrackStyle(slider) {
+            // Einheitliches Schema (wie Teil G): bei 0 grünlich, beim Schieben wandert amber -> rot
+            // Ausnahme Teil B (P07B): grau -> Buttonfarbe mit steigender Deckkraft
+            const v = parseFloat(slider.value);
+            const percent = (v / 7) * 100;
+            if (slider.name === 'P07B') {
+                return `linear-gradient(to right, #cccccc 0%, rgba(99, 102, 241, ${(v / 100).toFixed(2)}) 100%)`;
+            }
+            return `linear-gradient(to right, #f87171 0%, #fbbf24 ${percent}%, #34d399 100%)`;
+        }
+
+        function generateRanking() {
+            const pool = document.getElementById('rankPool');
+            pool.innerHTML = '';
+            riskFields.forEach(r => pool.appendChild(makeRankItem(r)));
+            setupDropzone(pool);
+            setupDropzone(document.getElementById('rankList'));
+        }
+
+        function updateRanking() {
+            const list = document.getElementById('rankList');
+            const order = Array.from(list.querySelectorAll('.rank-item')).map(el => el.dataset.code);
+            list.querySelectorAll('.rank-item').forEach((el, i) => {
+                el.querySelector('.rank-badge').textContent = i + 1;
+            });
+            formData['C00_RANK'] = order;
+            riskFields.forEach(r => {
+                const pos = order.indexOf(r.code);
+                formData[`C00_RANK_${r.code}`] = pos >= 0 ? pos + 1 : '';
+            });
+            localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+            reorderRiskTable(order);
+        }
+
+        function reorderRiskTable(order) {
+            const tbody = document.querySelector('.risk-table tbody');
+            if (!tbody) return;
+            const full = order.concat(riskFields.map(r => r.code).filter(c => !order.includes(c)));
+            full.forEach(code => {
+                const row = tbody.querySelector(`tr[data-code="${code}"]`);
+                if (row) tbody.appendChild(row);
+            });
+        }
+
+        function restoreRanking() {
+            const order = formData['C00_RANK'];
+            if (!order || !order.length) return;
+            const list = document.getElementById('rankList');
+            const pool = document.getElementById('rankPool');
+            order.forEach(code => {
+                const el = pool.querySelector(`.rank-item[data-code="${code}"]`);
+                if (el) list.appendChild(el);
+            });
+            updateRanking();
+        }
+
+        // ---- Teil B: P07B-Slider (0-100 %) ----
+        function setupP07B() {
+            const s = document.getElementById('P07B_PCT_slider');
+            if (!s) return;
+            const span = document.getElementById('P07B_PCT_value');
+            const render = () => {
+                const v = parseFloat(s.value);
+                span.textContent = Math.round(v) + '%';
+                s.classList.add('adjusted');
+                s.style.background = `linear-gradient(to right, #cccccc 0%, rgba(99, 102, 241, ${(v / 100).toFixed(2)}) 100%)`;
+            };
+            s.addEventListener('input', () => { render(); markSliderTouched(s); saveFormData(); });
+            render();
+        }
+
+        function generateRiskFields() {
+            const container = document.getElementById('riskFieldsContainer');
+            let html = `
+                <style>
+                    .risk-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 20px;
+                    }
+                    .risk-table th, .risk-table td {
+                        padding: 12px;
+                        text-align: left;
+                        border-bottom: 1px solid #e0e0e0;
+                    }
+                    .risk-table th {
+                        background: #f8fafc;
+                        font-weight: 600;
+                        color: #4f46e5;
+                        font-size: 13px;
+                    }
+                    .risk-table td {
+                        font-size: 13px;
+                    }
+                    .risk-name {
+                        font-weight: 500;
+                        min-width: 180px;
+                        max-width: 180px;
+                    }
+                    .slider-cell {
+                        min-width: 150px;
+                    }
+                    input[type="range"] {
+                        width: 100%;
+                        height: 6px;
+                        border-radius: 3px;
+                        background: #cccccc;
+                        outline: none;
+                        -webkit-appearance: none;
+                        cursor: pointer;
+                    }
+                    input[type="range"].adjusted {
+                        background: linear-gradient(to right, #34d399 0%, #fbbf24 50%, #f87171 100%);
+                    }
+                    input[type="range"]::-webkit-slider-thumb {
+                        -webkit-appearance: none;
+                        appearance: none;
+                        width: 18px;
+                        height: 18px;
+                        border-radius: 50%;
+                        background: #999999;
+                        cursor: pointer;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                        transition: background 0.3s;
+                    }
+                    input[type="range"].adjusted::-webkit-slider-thumb {
+                        background: #4f46e5;
+                    }
+                    input[type="range"]::-moz-range-thumb {
+                        width: 18px;
+                        height: 18px;
+                        border-radius: 50%;
+                        background: #999999;
+                        cursor: pointer;
+                        border: none;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                        transition: background 0.3s;
+                    }
+                    input[type="range"].adjusted::-moz-range-thumb {
+                        background: #4f46e5;
+                    }
+                    input[type="range"]::-moz-range-track {
+                        background: transparent;
+                        border: none;
+                    }
+                    .slider-value {
+                        font-weight: 600;
+                        color: #4f46e5;
+                        min-width: 25px;
+                        text-align: center;
+                    }
+                    .slider-wrapper {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                </style>
+
+                <table class="risk-table">
+                    <thead>
+                        <tr>
+                            <th>Risikofeld</th>
+                            <th>Eintrittswahrscheinlichkeit (5J)<br><span style="font-weight: 400; font-size: 11px;">unwahrscheinlich → wahrscheinlich</span></th>
+                            <th>Impact<br><span style="font-weight: 400; font-size: 11px;">gering → existenziell</span></th>
+                            <th>Preparedness<br><span style="font-weight: 400; font-size: 11px;">nicht vorbereitet → sehr vorbereitet</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            riskFields.forEach(risk => {
+                html += `
+                    <tr data-code="${risk.code}">
+                        <td class="risk-name">
+                            <strong>${risk.name}</strong>
+                            <div style="font-size: 11px; color: #999; margin-top: 4px;">${risk.desc}</div>
+                        </td>
+                        <td class="slider-cell">
+                            <div class="slider-wrapper">
+                                <input type="range" id="${risk.code}_PROB_slider" name="${risk.code}_PROB" min="0" max="7" step="0.01" value="0" data-type="prob" data-initial="-1">
+                                <span class="slider-value" id="${risk.code}_PROB_value"></span>
+                            </div>
+                        </td>
+                        <td class="slider-cell">
+                            <div class="slider-wrapper">
+                                <input type="range" id="${risk.code}_IMP_slider" name="${risk.code}_IMP" min="0" max="7" step="0.01" value="0" data-type="imp" data-initial="-1">
+                                <span class="slider-value" id="${risk.code}_IMP_value"></span>
+                            </div>
+                        </td>
+                        <td class="slider-cell">
+                            <div class="slider-wrapper">
+                                <input type="range" id="${risk.code}_PREP_slider" name="${risk.code}_PREP" min="0" max="7" step="0.01" value="0" data-type="prep" data-initial="-1">
+                                <span class="slider-value" id="${risk.code}_PREP_value"></span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = html;
+
+            // Teil-C-Slider: 0 ist der sichtbare Startwert (farbige Skala, Wert wird angezeigt)
+            document.querySelectorAll('.risk-table input[type="range"]').forEach(slider => {
+                const riskCode = slider.id.split('_')[0];
+                const metric = slider.id.split('_')[1];
+                const valueSpan = document.getElementById(`${riskCode}_${metric}_value`);
+                if (valueSpan) valueSpan.textContent = '0.0';
+                slider.classList.add('adjusted');
+                slider.style.background = sliderTrackStyle(slider);
+            });
+
+            // Add slider event listeners
+            document.querySelectorAll('input[type="range"]').forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const riskCode = this.id.split('_')[0];
+                    const metric = this.id.split('_')[1];
+                    const valueSpan = document.getElementById(`${riskCode}_${metric}_value`);
+                    const initialValue = this.getAttribute('data-initial');
+
+                    // Display value with 1 decimal only if adjusted
+                    if (this.value === initialValue) {
+                        valueSpan.textContent = '';
+                    } else {
+                        valueSpan.textContent = parseFloat(this.value).toFixed(1);
+                    }
+
+                    // Add adjusted class if value differs from initial
+                    if (this.value !== initialValue) {
+                        this.classList.add('adjusted');
+                        this.style.background = sliderTrackStyle(this);
+                    } else {
+                        this.classList.remove('adjusted');
+                        this.style.background = '#34d399';
+                    }
+
+                    markSliderTouched(this);
+                    saveFormData();
+                });
+            });
+        }
+
+        function generateImpactMaps() {
+            const container = document.getElementById('impactContainer');
+            let html = `
+                <style>
+                    .impact-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 20px;
+                    }
+                    .impact-table th, .impact-table td {
+                        padding: 12px;
+                        border-bottom: 1px solid #e0e0e0;
+                    }
+                    .impact-table td {
+                        text-align: left;
+                    }
+                    .impact-table th {
+                        text-align: left;
+                    }
+                    .impact-table th {
+                        background: #f8fafc;
+                        font-weight: 600;
+                        color: #4f46e5;
+                        font-size: 13px;
+                    }
+                    .impact-table th:not(:first-child) {
+                        text-align: center;
+                    }
+                    .impact-table td {
+                        font-size: 13px;
+                    }
+                    .impact-area-name {
+                        font-weight: 500;
+                        min-width: 220px;
+                    }
+                    .impact-checkbox-cell {
+                        text-align: center !important;
+                    }
+                    .impact-checkbox-cell input {
+                        width: 18px;
+                        height: 18px;
+                        cursor: pointer;
+                    }
+                </style>
+
+                <table class="impact-table">
+                    <thead>
+                        <tr>
+                            <th>Wirkungsbereich</th>
+                            <th>Nächste 12M<br><span style="font-weight: 400; font-size: 11px;">Max. 3</span></th>
+                            <th>Ca. 2 Jahre<br><span style="font-weight: 400; font-size: 11px;">Max. 3</span></th>
+                            <th>Ca. 5 Jahre<br><span style="font-weight: 400; font-size: 11px;">Max. 3</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            impactAreas.forEach((area, idx) => {
+                html += `
+                    <tr>
+                        <td class="impact-area-name">${area}</td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="impact_12M_${idx}" name="D01_12M" value="${area}">
+                        </td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="impact_2J_${idx}" name="D01_2J" value="${area}">
+                        </td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="impact_5J_${idx}" name="D01_5J" value="${area}">
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = html;
+
+            // Add max 3 checkbox limit per column
+            document.querySelectorAll('.impact-checkbox-cell input').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const columnName = this.name; // D01_12M, D01_2J, D01_5J
+                    const checkedCount = document.querySelectorAll(`input[name="${columnName}"]:checked`).length;
+
+                    if (checkedCount > 3) {
+                        this.checked = false;
+                        showNavError('Maximum 3 Bereiche pro Horizont erlaubt.');
+                    }
+                });
+            });
+        }
+
+        function generateFutureGain() {
+            const container = document.getElementById('futureGainContainer');
+            let html = `
+                <table class="impact-table">
+                    <thead>
+                        <tr>
+                            <th>Risikofeld</th>
+                            <th>Nächste 12M<br><span style="font-weight: 400; font-size: 11px;">Max. 3</span></th>
+                            <th>Ca. 2 Jahre<br><span style="font-weight: 400; font-size: 11px;">Max. 3</span></th>
+                            <th>Ca. 5 Jahre<br><span style="font-weight: 400; font-size: 11px;">Max. 3</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            riskFields.forEach(risk => {
+                html += `
+                    <tr>
+                        <td class="impact-area-name">${risk.name}</td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="gain_12M_${risk.code}" name="F01_12M" value="${risk.name}">
+                        </td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="gain_2J_${risk.code}" name="F01_2J" value="${risk.name}">
+                        </td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="gain_5J_${risk.code}" name="F01_5J" value="${risk.name}">
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = html;
+
+            // Add max 3 checkbox limit per horizon
+            document.querySelectorAll('input[name^="F01_"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const horizon = this.name.replace('F01_', '');
+                    const checkedCount = document.querySelectorAll(`input[name="F01_${horizon}"]:checked`).length;
+
+                    if (checkedCount > 3) {
+                        this.checked = false;
+                        showNavError('Maximum 3 Risikofelder pro Horizont erlaubt.');
+                    }
+                });
+            });
+        }
+
+        function generateFutureLoss() {
+            const container = document.getElementById('futureLossContainer');
+            let html = `
+                <table class="impact-table">
+                    <thead>
+                        <tr>
+                            <th>Risikofeld</th>
+                            <th>Nächste 12M<br><span style="font-weight: 400; font-size: 11px;">Max. 3</span></th>
+                            <th>Ca. 2 Jahre<br><span style="font-weight: 400; font-size: 11px;">Max. 3</span></th>
+                            <th>Ca. 5 Jahre<br><span style="font-weight: 400; font-size: 11px;">Max. 3</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            riskFields.forEach(risk => {
+                html += `
+                    <tr>
+                        <td class="impact-area-name">${risk.name}</td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="loss_12M_${risk.code}" name="F02_12M" value="${risk.name}">
+                        </td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="loss_2J_${risk.code}" name="F02_2J" value="${risk.name}">
+                        </td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="loss_5J_${risk.code}" name="F02_5J" value="${risk.name}">
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    <tr>
+                        <td class="impact-area-name"><strong>Keines</strong></td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="loss_12M_none" name="F02_12M" value="Keines">
+                        </td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="loss_2J_none" name="F02_2J" value="Keines">
+                        </td>
+                        <td class="impact-checkbox-cell">
+                            <input type="checkbox" id="loss_5J_none" name="F02_5J" value="Keines">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = html;
+
+            // Add max 3 checkbox limit per horizon
+            document.querySelectorAll('input[name^="F02_"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const horizon = this.name.replace('F02_', '');
+                    const checkedCount = document.querySelectorAll(`input[name="F02_${horizon}"]:checked`).length;
+
+                    if (checkedCount > 3) {
+                        this.checked = false;
+                        showNavError('Maximum 3 Risikofelder pro Horizont erlaubt.');
+                    }
+                });
+            });
+        }
+
+        function showSection(n) {
+            const allSections = document.querySelectorAll('.section');
+
+            if (n >= allSections.length) n = allSections.length - 1;
+            if (n < 0) n = 0;
+
+            allSections.forEach(s => s.classList.remove('active'));
+            allSections[n].classList.add('active');
+
+            currentSection = n;
+
+            // Generate Teil E dynamically based on Teil C scores
+            if (allSections[n].dataset.section === 'E') {
+                generateTeilE();
+            }
+
+            updateNavigation();
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function attachSliderHandler(slider) {
+            slider.addEventListener('input', function() {
+                const riskCode = this.id.split('_')[0];
+                const metric = this.id.split('_')[1];
+                const valueSpan = document.getElementById(`${riskCode}_${metric}_value`);
+                const initialValue = this.getAttribute('data-initial');
+
+                if (this.value === initialValue) {
+                    if (valueSpan) valueSpan.textContent = '';
+                } else {
+                    if (valueSpan) valueSpan.textContent = parseFloat(this.value).toFixed(1);
+                }
+
+                if (this.value !== initialValue) {
+                    this.classList.add('adjusted');
+                    this.style.background = sliderTrackStyle(this);
+                } else {
+                    this.classList.remove('adjusted');
+                    this.style.background = '#cccccc';
+                }
+
+                markSliderTouched(this);
+                saveFormData();
+            });
+        }
+
+        function generateTeilE() {
+            const container = document.getElementById('teilEContainer');
+
+            // Compute Risk Score = (PROB × IMP) / 7 per risk field
+            const scored = riskFields.map(r => {
+                const prob = parseFloat(formData[`${r.code}_PROB`] || 0);
+                const imp = parseFloat(formData[`${r.code}_IMP`] || 0);
+                return { ...r, prob, imp, score: (prob * imp) / 7 };
+            }).sort((a, b) => b.score - a.score || b.imp - a.imp || b.prob - a.prob);
+
+            const top3 = scored.slice(0, 3);
+            formData['E_TOP'] = top3.map(r => r.code);
+            localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+
+            let html = `
+                <div class="section-intro">
+                    <p>Sie haben die drei folgenden Risikofelder besonders hoch bewertet:
+                    <strong>${top3.map(r => r.name).join(', ')}</strong>.
+                    Wir möchten diese nun näher betrachten.</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 20px; align-items: stretch;">
+            `;
+
+            const cellStyle = 'padding: 12px 12px 35px 12px; background: #fafafa; border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;';
+
+            // Row 1: Risk names
+            top3.forEach(risk => {
+                html += `<div style="${cellStyle} border-top: 1px solid #e0e0e0; border-radius: 8px 8px 0 0;">
+                    <h3 style="color: #4f46e5; margin: 0;">${risk.name}</h3>
+                </div>`;
+            });
+
+            // Row 2: HOR
+            top3.forEach(risk => {
+                html += `<div style="${cellStyle}">
+                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Wann erwarten Sie eine einschneidend spürbare Zuspitzung?</label>
+                    <select name="E_HOR_${risk.code}" style="font-size: 13px;">
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="Bereits einschneidend spürbar">Bereits einschneidend spürbar</option>
+                        <option value="Innerhalb der nächsten 12 Monate">Innerhalb der nächsten 12 Monate</option>
+                        <option value="In etwa 2 Jahren">In etwa 2 Jahren</option>
+                        <option value="In etwa 5 Jahren">In etwa 5 Jahren</option>
+                        <option value="Später als 5 Jahre">Später als 5 Jahre</option>
+                        <option value="Erwarte ich nicht">Erwarte ich nicht</option>
+                    </select>
+                </div>`;
+            });
+
+            // Row 3: SPD
+            top3.forEach(risk => {
+                html += `<div style="${cellStyle}">
+                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Wie würde sich das Risiko entfalten?</label>
+                    <div class="slider-wrapper">
+                        <input type="range" id="${risk.code}_SPD_slider" name="E_SPD_${risk.code}" min="0" max="7" step="0.01" value="0" data-initial="-1">
+                        <span class="slider-value" id="${risk.code}_SPD_value"></span>
+                    </div>
+                    <div class="scale-labels">
+                        <span style="font-size: 10px;">sehr allmählich</span>
+                        <span style="font-size: 10px;">sehr abrupt</span>
+                    </div>
+                </div>`;
+            });
+
+            // Row 4: PER
+            top3.forEach(risk => {
+                html += `<div style="${cellStyle}">
+                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Wie lange würden die Auswirkungen anhalten?</label>
+                    <div class="slider-wrapper">
+                        <input type="range" id="${risk.code}_PER_slider" name="E_PER_${risk.code}" min="0" max="7" step="0.01" value="0" data-initial="-1">
+                        <span class="slider-value" id="${risk.code}_PER_value"></span>
+                    </div>
+                    <div class="scale-labels">
+                        <span style="font-size: 10px;">vorübergehend</span>
+                        <span style="font-size: 10px;">dauerhafter Strukturbruch</span>
+                    </div>
+                </div>`;
+            });
+
+            // Row 5: CH
+            top3.forEach(risk => {
+                html += `<div style="${cellStyle}">
+                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Welche Bereiche wären durch das Risiko besonders betroffen? (Max. 4)</label>
+                    <div class="checkbox-group" style="gap: 4px;">
+                        ${impactAreas.map((area, idx) => `
+                            <div class="checkbox-option" style="padding: 4px;">
+                                <input type="checkbox" id="ech_${risk.code}_${idx}" name="E_CH_${risk.code}" value="${area}">
+                                <label for="ech_${risk.code}_${idx}" style="font-size: 12px;">${area}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            // Row 6: TXT
+            top3.forEach(risk => {
+                html += `<div style="${cellStyle} border-bottom: 1px solid #e0e0e0; border-radius: 0 0 8px 8px;">
+                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Was müsste die Branche konkret tun, was sie heute nicht oder nicht ausreichend tut?</label>
+                    <textarea name="E_TXT_${risk.code}" placeholder="ca. 400 Zeichen" style="font-size: 13px; min-height: 80px; box-sizing: border-box;"></textarea>
+                </div>`;
+            });
+
+            html += `</div>`;
+
+            container.innerHTML = html;
+
+            // Attach handlers to new elements
+            container.querySelectorAll('input[type="range"]').forEach(slider => {
+                attachSliderHandler(slider);
+                // 0 als sichtbarer Startwert
+                {
+                    const rc = slider.id.split('_')[0];
+                    const mt = slider.id.split('_')[1];
+                    const vs = document.getElementById(`${rc}_${mt}_value`);
+                    if (vs) vs.textContent = '0.0';
+                    slider.classList.add('adjusted');
+                    slider.style.background = sliderTrackStyle(slider);
+                }
+                // Restore saved value
+                const saved = formData[slider.name];
+                if (saved && saved !== '0') {
+                    slider.value = saved;
+                    slider.classList.add('adjusted');
+                    const percent = (saved / 7) * 100;
+                    slider.style.background = `linear-gradient(to right, #34d399 0%, #fbbf24 ${percent}%, #f87171 100%)`;
+                    const riskCode = slider.id.split('_')[0];
+                    const metric = slider.id.split('_')[1];
+                    const valueSpan = document.getElementById(`${riskCode}_${metric}_value`);
+                    if (valueSpan) valueSpan.textContent = parseFloat(saved).toFixed(1);
+                }
+            });
+
+            // Max 4 limit for channel checkboxes + restore saved
+            container.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                if (formData[checkbox.name] && formData[checkbox.name].includes(checkbox.value)) {
+                    checkbox.checked = true;
+                }
+                checkbox.addEventListener('change', function() {
+                    const checkedCount = container.querySelectorAll(`input[name="${this.name}"]:checked`).length;
+                    if (checkedCount > 4) {
+                        this.checked = false;
+                        showNavError('Maximum 4 Kanäle erlaubt.');
+                    }
+                    saveFormData();
+                });
+            });
+
+            // Restore selects and textareas + autosave
+            container.querySelectorAll('select, textarea').forEach(input => {
+                if (formData[input.name]) input.value = formData[input.name];
+                input.addEventListener('change', saveFormData);
+            });
+        }
+
+        // Zugangscodes werden seit Version v2026-09-26b nicht mehr geprüft (weder hier noch im Apps Script).
+
+        function showNavError(msg) {
+            const el = document.getElementById('navError');
+            el.textContent = msg;
+            el.style.display = 'inline';
+            clearTimeout(el._hideTimer);
+            el._hideTimer = setTimeout(() => { el.style.display = 'none'; }, 4000);
+        }
+
+        function nextSection() {
+            saveFormData();
+
+            if (currentSection === 0) {
+                // Der Zugangscode wird nicht geprüft; der eingegebene Wert wird als P00_TOKEN gespeichert.
+                const consent = document.querySelector('input[name="A01"]:checked');
+                if (!consent) {
+                    showNavError('Bitte wählen Sie Ja oder Nein.');
+                    return;
+                }
+                if (consent.value === 'Nein') {
+                    showNavError('Sie haben der Teilnahme nicht zugestimmt.');
+                    return;
+                }
+                if (!formData['SYS_TS_START']) {
+                    formData['SYS_TS_START'] = new Date().toISOString();
+                    localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+                }
+            }
+
+            if (sections[currentSection] === 'H') {
+                // Letzte Seite: Abschlussseite anzeigen und Antworten übermitteln
+                showSection(currentSection + 1);
+                submitResponses();
+                return;
+            }
+
+            showSection(currentSection + 1);
+        }
+
+        function previousSection() {
+            saveFormData();
+            showSection(currentSection - 1);
+        }
+
+        function saveFormData() {
+            if (submitted) return;
+            const form = document.querySelector('form') || {};
+            const inputs = document.querySelectorAll('input, select, textarea');
+            const clearedCheckboxGroups = new Set();
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    if (!clearedCheckboxGroups.has(input.name)) {
+                        formData[input.name] = [];
+                        clearedCheckboxGroups.add(input.name);
+                    }
+                    if (input.checked) {
+                        formData[input.name].push(input.value);
+                    }
+                } else if (input.type === 'radio') {
+                    if (input.checked) {
+                        formData[input.name] = input.value;
+                    }
+                } else {
+                    formData[input.name] = input.value;
+                }
+            });
+            // Save to localStorage
+            localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+        }
+
+        function loadFormData() {
+            const saved = localStorage.getItem('blacklakeFormData');
+            if (saved) {
+                formData = JSON.parse(saved);
+                // Restore form values
+                const inputs = document.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    if (input.type === 'checkbox') {
+                        if (formData[input.name] && formData[input.name].includes(input.value)) {
+                            input.checked = true;
+                        }
+                    } else if (input.type === 'radio') {
+                        if (formData[input.name] === input.value) {
+                            input.checked = true;
+                        }
+                    } else if (input.type === 'range') {
+                        if (formData[input.name]) {
+                            input.value = formData[input.name];
+                            const riskCode = input.id.split('_')[0];
+                            const metric = input.id.split('_')[1];
+                            const valueSpan = document.getElementById(`${riskCode}_${metric}_value`);
+                            if (valueSpan) {
+                                const initialValue = input.getAttribute('data-initial');
+                                if (formData[input.name] === initialValue) {
+                                    valueSpan.textContent = '';
+                                } else {
+                                    valueSpan.textContent = parseFloat(formData[input.name]).toFixed(1);
+                                }
+                            }
+                            // Add adjusted class if value differs from initial
+                            if (String(formData[input.name]) !== String(input.getAttribute('data-initial'))) {
+                                input.classList.add('adjusted');
+                                input.style.background = sliderTrackStyle(input);
+                            } else {
+                                input.style.background = '#cccccc';
+                            }
+                        }
+                    } else {
+                        input.value = formData[input.name] || '';
+                    }
+                });
+            }
+        }
+
+        function autoSaveOnChange() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    input.addEventListener('change', saveFormData);
+                } else {
+                    input.addEventListener('change', saveFormData);
+                }
+            });
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.disabled = currentSection === 0;
+            nextBtn.textContent = currentSection === sections.length - 1 ? 'Abschließen' : 'Weiter →';
+
+            // "Formular zurücksetzen" nach bestätigter Übermittlung ausblenden
+            const resetBtn = document.getElementById('resetBtn');
+            if (resetBtn) {
+                resetBtn.style.display = (currentSection === sections.length - 1 && submitState === 'success') ? 'none' : '';
+            }
+
+            if (currentSection === sections.length - 1) {
+                // Abschlussseite: Schaltflächen hängen vom Übermittlungsstatus ab
+                prevBtn.disabled = submitState !== 'error';
+                nextBtn.disabled = submitState === 'saving';
+                if (submitState === 'success') {
+                    nextBtn.textContent = 'Abschließen';
+                    nextBtn.onclick = () => window.location.reload();
+                } else if (submitState === 'error') {
+                    nextBtn.textContent = 'Erneut senden';
+                    nextBtn.onclick = submitResponses;
+                } else {
+                    nextBtn.textContent = 'Wird übermittelt …';
+                    nextBtn.onclick = null;
+                }
+            } else {
+                nextBtn.disabled = false;
+                nextBtn.onclick = nextSection;
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentSection + 1) / sections.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function downloadJSON() {
+            saveFormData();
+            let codebookRow = null;
+            try { codebookRow = encodeCodebookRow(formData, new Date()); } catch (e) { codebookRow = { error: String(e) }; }
+            const dataStr = JSON.stringify({
+                exported_at: new Date().toISOString(),
+                form_version: FORM_VERSION,
+                codebook_row: codebookRow,
+                form_data: formData
+            }, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Blacklake_Response_${new Date().toISOString().slice(0,10)}.json`;
+            link.click();
+        }
+
+        function downloadCSV() {
+            saveFormData();
+            let csv = 'Feld,Wert\n';
+            for (const [key, value] of Object.entries(formData)) {
+                const val = Array.isArray(value) ? value.join('; ') : value;
+                csv += `"${key}","${val}"\n`;
+            }
+            const dataBlob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Blacklake_Response_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+        }
+
+        function resetForm() {
+            if (confirm('Möchten Sie wirklich alle Antworten löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+                localStorage.removeItem('blacklakeFormData');
+                formData = {};
+                location.reload();
+            }
+        }
+
+        // =====================================================================
+        // ÜBERMITTLUNG AN GOOGLE SHEETS (Apps Script) – siehe documentation/BLACKLAKE_Sheets_Setup_Guide.md
+        // ===== SUBMISSION: BEGIN =====
+        const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbz93038hSoThP5YTeQvUrAzYRihXt-iKsU0bX6G8Z0qQDRy3YXSst0bxqUDMK-Ond2wHA/exec';            // Web-App-URL des Apps Script eintragen (endet auf /exec)
+        const WAVE = 1;
+        const FORM_VERSION = 'v2026-09-26b';
+        const SUBMIT_TIMEOUT_MS = 30000;
+        const MISSING = 99;               // Codebook: 99 = keine Angabe
+
+        // Codelisten gemäß Codebook (documentation/BLACKLAKE_Risk_Monitor_v04_DummyData.xlsx, Blatt "Codebook").
+        // Listenposition + 1 = numerischer Code. Die Strings müssen den value-Attributen im Formular entsprechen.
+        const CODES = {
+            P01: ['Institutioneller Investor', 'Asset Manager', 'Immobilienunternehmen', 'Family Office', 'Projektentwickler', 'Bauunternehmen', 'Bank', 'Nutzer', 'Property Management', 'Beratung', 'Dienstleister', 'Wissenschaft', 'Politik', 'Verwaltung', 'Aufsicht', 'Verband', 'Sonstiges'],
+            P01_GRP: [1, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6, 6, 6, 6, MISSING],   // Index = P01 - 1; Sonstiges -> 99
+            P02: ['Vorstand', 'Aufsichtsrat', 'Bereichsleitung', 'Director', 'Professur', 'Sonstige'],
+            P03: ['< 10', '10-19', '20-29', '30+'],
+            P04: ['Deutschland', 'DACH', 'Europa', 'Global'],
+            P05: ['Investment Management und Transaktion', 'Asset Management', 'Projektentwicklung und Bau', 'Finanzierung und Kapitalmarkt', 'Portfoliomanagement und Strategie', 'Property / Facility / Technical Management', 'Nutzung / Corporate Real Estate / Betreiberfunktion', 'Beratung / Bewertung / Research', 'Unternehmensführung ohne funktionalen Schwerpunkt', 'Überwachung / Steuerung'],
+            P06: ['Wohnen', 'Büro', 'Einzelhandel', 'Logistik', 'Hotel', 'Healthcare', 'Rechenzentren', 'Übergreifend'],
+            P07: ['< 250 Mio.', '250 Mio. - 1 Mrd.', '1 - 5 Mrd.', '5 - 20 Mrd.', '> 20 Mrd.'],   // 'keine Angabe' -> 99
+            P08: ['Eigenkapitalseite', 'Fremdkapitalseite', 'beides', 'weder noch'],
+            GRP: ['Kapital, Investment & Eigentum', 'Entwicklung & Bau', 'Finanzierung & Risiko', 'Nutzer & Betrieb', 'Beratung & Marktdienstleistungen', 'Institutionelles Umfeld'],
+            HOR: ['Bereits einschneidend spürbar', 'Innerhalb der nächsten 12 Monate', 'In etwa 2 Jahren', 'In etwa 5 Jahren', 'Später als 5 Jahre', 'Erwarte ich nicht'],
+            F03: { 'Geopolitik': 'GEO', 'Sicherheit': 'SEC', 'Volkswirtschaft': 'MAK', 'Kapitalmarkt': 'CAP', 'Technologie': 'TEC', 'Cybersecurity': 'CYB', 'Energieversorgung': 'ENE', 'Nachhaltigkeit': 'ESG', 'Regulierung': 'REG', 'Demografie': 'DEM', 'Andere': 'OTH', 'Keine': 'NONE' },
+            CHANNELS: ['VAL', 'NUT', 'FIN', 'LIQ', 'BAU', 'SAN', 'BET', 'VER', 'MIT', 'GEN'],   // Reihenfolge = impactAreas
+            HORIZONS: ['12M', '2J', '5J']
+        };
+
+        let submitState = 'idle';   // idle | saving | success | error
+        let submitted = false;
+
+        function markSliderTouched(slider) {
+            if (slider && slider.name) formData[slider.name + '_TOUCHED'] = 1;
+        }
+
+        function ensureClientId() {
+            if (!formData['CLIENT_ID']) {
+                formData['CLIENT_ID'] = (window.crypto && crypto.randomUUID)
+                    ? crypto.randomUUID()
+                    : 'c' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+                localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+            }
+        }
+
+        function codeOf(list, value) { const i = list.indexOf(value); return i >= 0 ? i + 1 : MISSING; }
+        function flag(arr, value) { return Array.isArray(arr) && arr.includes(value) ? 1 : 0; }
+        function text(v) { return (v === undefined || v === null) ? '' : String(v).trim(); }
+        function sliderValue(fd, name) {
+            // Unberührte Slider zählen als "keine Angabe" (99); sonst Wert 0–7 mit 2 Dezimalen
+            if (!fd[name + '_TOUCHED']) return MISSING;
+            const v = parseFloat(fd[name]);
+            return isNaN(v) ? MISSING : Math.round(v * 100) / 100;
+        }
+
+        function computeTop3(fd) {
+            if (Array.isArray(fd['E_TOP']) && fd['E_TOP'].length === 3) return fd['E_TOP'];
+            // Fallback: gleiche Logik wie generateTeilE
+            return riskFields.map(r => {
+                const prob = parseFloat(fd[`${r.code}_PROB`] || 0);
+                const imp = parseFloat(fd[`${r.code}_IMP`] || 0);
+                return { code: r.code, prob, imp, score: (prob * imp) / 7 };
+            }).sort((a, b) => b.score - a.score || b.imp - a.imp || b.prob - a.prob).slice(0, 3).map(r => r.code);
+        }
+
+        // Wandelt formData (Labels) in eine Zeile im Codebook-Format um (Spalten wie im Apps Script buildHeaders()).
+        function encodeCodebookRow(fd, now) {
+            const row = {};
+            const start = fd['SYS_TS_START'] ? new Date(fd['SYS_TS_START']) : null;
+            const rank = Array.isArray(fd['C00_RANK']) ? fd['C00_RANK'] : [];
+
+            row.WAVE = WAVE;
+            row.P00_TOKEN = text(fd['ACCESS_CODE']);
+            row.A01 = fd['A01'] === 'Ja' ? 1 : 0;
+            row.SYS_ORDER = rank.join('-');
+            row.SYS_DUR = (start && !isNaN(start)) ? Math.round((now - start) / 6000) / 10 : '';
+
+            const p01 = codeOf(CODES.P01, fd['P01']);
+            row.P01 = p01;
+            row.P01_GRP = p01 === MISSING ? MISSING : CODES.P01_GRP[p01 - 1];
+            row.P02 = codeOf(CODES.P02, fd['P02']);
+            row.P03 = codeOf(CODES.P03, fd['P03']);
+            row.P04 = codeOf(CODES.P04, fd['P04']);
+            CODES.P05.forEach((v, i) => { row[`P05_${i + 1}`] = flag(fd['P05'], v); });
+            row.P05B = codeOf(CODES.P05, fd['P05b']);
+            CODES.P06.forEach((v, i) => { row[`P06_${i + 1}`] = flag(fd['P06'], v); });
+            row.P07 = codeOf(CODES.P07, fd['P07']);
+            row.P07B = fd['P07B_TOUCHED'] && !isNaN(parseFloat(fd['P07B'])) ? Math.round(parseFloat(fd['P07B'])) : '';
+            row.P08 = codeOf(CODES.P08, fd['P08']);
+
+            riskFields.forEach(r => {
+                row[`${r.code}_PROB`] = sliderValue(fd, `${r.code}_PROB`);
+                row[`${r.code}_IMP`] = sliderValue(fd, `${r.code}_IMP`);
+                row[`${r.code}_PREP`] = sliderValue(fd, `${r.code}_PREP`);
+            });
+            row.C04_TXT = text(fd['C04']);
+
+            CODES.CHANNELS.forEach((c, i) => {
+                CODES.HORIZONS.forEach(h => { row[`D01_${c}_${h}`] = flag(fd[`D01_${h}`], impactAreas[i]); });
+            });
+
+            const top3 = computeTop3(fd);
+            top3.forEach((code, j) => {
+                const n = j + 1;
+                row[`E_TOP${n}`] = code;
+                row[`E${n}_HOR`] = codeOf(CODES.HOR, fd[`E_HOR_${code}`]);
+                row[`E${n}_SPD`] = sliderValue(fd, `E_SPD_${code}`);
+                row[`E${n}_PER`] = sliderValue(fd, `E_PER_${code}`);
+                CODES.CHANNELS.forEach((c, i) => { row[`E${n}_CH_${c}`] = flag(fd[`E_CH_${code}`], impactAreas[i]); });
+                row[`E${n}_TXT`] = text(fd[`E_TXT_${code}`]);
+            });
+
+            riskFields.forEach(r => {
+                CODES.HORIZONS.forEach(h => {
+                    row[`F01_${r.code}_${h}`] = flag(fd[`F01_${h}`], r.name);
+                    row[`F02_${r.code}_${h}`] = flag(fd[`F02_${h}`], r.name);
+                });
+            });
+            CODES.HORIZONS.forEach(h => { row[`F02_NONE_${h}`] = flag(fd[`F02_${h}`], 'Keines'); });
+
+            row.F03 = CODES.F03[fd['F03']] || '';
+            row.F03_TXT = row.F03 === 'OTH' ? text(fd['F03_TXT']) : '';
+            row.F04 = CODES.F03[fd['F04']] || '';
+            row.F05_TXT = text(fd['F05']);
+            riskFields.forEach(r => { row[`F06_${r.code}`] = flag(fd['F06'], r.name); });
+            row.F06_OTH = flag(fd['F06'], 'Andere Entwicklung');
+            row.F07_TXT = text(fd['F07']);
+
+            row.G01 = sliderValue(fd, 'G01');
+            row.G02 = codeOf(CODES.GRP, fd['G02']);
+            row.G03 = codeOf(CODES.GRP, fd['G03']);
+            row.H01 = sliderValue(fd, 'H01');
+            row.H02_TXT = text(fd['H02']);
+
+            // Zusatzspalten (nicht im v04-Codebook)
+            row.CLIENT_ID = fd['CLIENT_ID'] || '';
+            row.FORM_VERSION = FORM_VERSION;
+            row.SYS_TS_START = (start && !isNaN(start)) ? start.toISOString() : '';
+            row.SYS_TS_END = now.toISOString();
+            riskFields.forEach(r => {
+                const pos = rank.indexOf(r.code);
+                row[`C00_RANK_${r.code}`] = pos >= 0 ? pos + 1 : '';
+            });
+            return row;
+        }
+
+        function setCompletionState(state, detail) {
+            submitState = state;
+            const show = (id, on) => { const el = document.getElementById(id); if (el) el.style.display = on ? 'block' : 'none'; };
+            show('completionSaving', state === 'saving');
+            show('completionSuccess', state === 'success');
+            show('completionError', state === 'error');
+            const d = document.getElementById('completionErrorDetail');
+            if (d) d.textContent = detail ? `Technische Details: ${detail}` : '';
+            updateNavigation();
+        }
+
+        async function submitResponses() {
+            if (submitState === 'saving' || submitted) return;
+            saveFormData();
+            ensureClientId();
+            setCompletionState('saving');
+
+            let payload;
+            try {
+                payload = encodeCodebookRow(formData, new Date());
+            } catch (err) {
+                setCompletionState('error', 'Kodierung fehlgeschlagen: ' + (err.message || err));
+                return;
+            }
+            if (!SUBMIT_URL) {
+                setCompletionState('error', 'Kein Übermittlungs-Endpunkt konfiguriert (SUBMIT_URL ist leer).');
+                return;
+            }
+
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS);
+            try {
+                const res = await fetch(SUBMIT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // "simple request": kein CORS-Preflight
+                    body: JSON.stringify(payload),
+                    redirect: 'follow',
+                    signal: controller.signal
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const json = await res.json();
+                if (json.result !== 'success') throw new Error(json.error || 'Unbekannter Serverfehler');
+                submitted = true;
+                localStorage.removeItem('blacklakeFormData');
+                setCompletionState('success');
+            } catch (err) {
+                const msg = err.name === 'AbortError' ? 'Zeitüberschreitung (keine Antwort vom Server)' : (err.message || String(err));
+                setCompletionState('error', msg);
+            } finally {
+                clearTimeout(timer);
+            }
+        }
+        // ===== SUBMISSION: END =====
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', initializeForm);
+    </script>
+</body>
+</html>
