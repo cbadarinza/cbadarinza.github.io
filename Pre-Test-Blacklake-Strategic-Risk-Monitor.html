@@ -463,10 +463,6 @@
                     <p style="margin-top: 12px;">Ihre Angaben werden streng vertraulich behandelt und ausschließlich anonymisiert ausgewertet, sodass keine Rückschlüsse auf Ihr Unternehmen möglich sind.</p>
                 </div>
 
-                <div class="form-group">
-                    <label>Zugangscode</label>
-                    <input type="text" name="ACCESS_CODE" id="accessCode" placeholder="Bitte geben Sie Ihren Zugangscode ein" autocomplete="off">
-                </div>
 
                 <div class="form-group">
                     <label>Stimmen Sie einer Teilnahme zu? <span class="required">*</span></label>
@@ -989,6 +985,17 @@
         let currentSection = 0;
         let formData = {};
 
+        // Zwischenspeicher für den Bearbeitungsstand: sessionStorage ist an den Browser-Tab gebunden.
+        // Ein zweiter Tab oder eine andere Person am selben Gerät sieht dadurch keine fremden Antworten;
+        // ein Neuladen im selben Tab stellt die Antworten wieder her. (Bis v2026-09-26b wurde der
+        // gerätweit geteilte Speicher verwendet.)
+        const STORAGE_KEY = 'blacklakeFormData';
+        const store = {
+            get: () => { try { return sessionStorage.getItem(STORAGE_KEY); } catch (e) { return null; } },
+            set: (v) => { try { sessionStorage.setItem(STORAGE_KEY, v); } catch (e) {} },
+            clear: () => { try { sessionStorage.removeItem(STORAGE_KEY); } catch (e) {} }
+        };
+
         function initFixedSliders() {
             [['G01_SELF_slider', 'G01_SELF_value'], ['H01_RISK_slider', 'H01_RISK_value']].forEach(([sid, vid]) => {
                 const s = document.getElementById(sid);
@@ -1001,6 +1008,8 @@
         }
 
         function initializeForm() {
+            // Altbestand der Vorversion (gerätweit geteilter Speicher) entfernen, damit er niemandem angezeigt wird
+            try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
             generateRiskFields();
             generateImpactMaps();
             generateFutureGain();
@@ -1143,7 +1152,7 @@
                 const pos = order.indexOf(r.code);
                 formData[`C00_RANK_${r.code}`] = pos >= 0 ? pos + 1 : '';
             });
-            localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+            store.set(JSON.stringify(formData));
             reorderRiskTable(order);
         }
 
@@ -1631,7 +1640,7 @@
 
             const top3 = scored.slice(0, 3);
             formData['E_TOP'] = top3.map(r => r.code);
-            localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+            store.set(JSON.stringify(formData));
 
             let html = `
                 <div class="section-intro">
@@ -1772,7 +1781,7 @@
             });
         }
 
-        // Zugangscodes werden seit Version v2026-09-26b nicht mehr geprüft (weder hier noch im Apps Script).
+        // Es gibt keinen Zugangscode mehr. Je Sitzung wird automatisch ein zufälliger Code erzeugt (SESSION_CODE -> P00_TOKEN).
 
         function showNavError(msg) {
             const el = document.getElementById('navError');
@@ -1786,7 +1795,6 @@
             saveFormData();
 
             if (currentSection === 0) {
-                // Der Zugangscode wird nicht geprüft; der eingegebene Wert wird als P00_TOKEN gespeichert.
                 const consent = document.querySelector('input[name="A01"]:checked');
                 if (!consent) {
                     showNavError('Bitte wählen Sie Ja oder Nein.');
@@ -1798,7 +1806,7 @@
                 }
                 if (!formData['SYS_TS_START']) {
                     formData['SYS_TS_START'] = new Date().toISOString();
-                    localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+                    store.set(JSON.stringify(formData));
                 }
             }
 
@@ -1839,12 +1847,12 @@
                     formData[input.name] = input.value;
                 }
             });
-            // Save to localStorage
-            localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+            // Bearbeitungsstand im Tab sichern
+            store.set(JSON.stringify(formData));
         }
 
         function loadFormData() {
-            const saved = localStorage.getItem('blacklakeFormData');
+            const saved = store.get();
             if (saved) {
                 formData = JSON.parse(saved);
                 // Restore form values
@@ -1971,7 +1979,7 @@
 
         function resetForm() {
             if (confirm('Möchten Sie wirklich alle Antworten löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
-                localStorage.removeItem('blacklakeFormData');
+                store.clear();
                 formData = {};
                 location.reload();
             }
@@ -1982,7 +1990,7 @@
         // ===== SUBMISSION: BEGIN =====
         const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbz93038hSoThP5YTeQvUrAzYRihXt-iKsU0bX6G8Z0qQDRy3YXSst0bxqUDMK-Ond2wHA/exec';            // Web-App-URL des Apps Script eintragen (endet auf /exec)
         const WAVE = 1;
-        const FORM_VERSION = 'v2026-09-26b';
+        const FORM_VERSION = 'v2026-09-29b';
         const SUBMIT_TIMEOUT_MS = 30000;
         const MISSING = 99;               // Codebook: 99 = keine Angabe
 
@@ -2012,13 +2020,27 @@
             if (slider && slider.name) formData[slider.name + '_TOUCHED'] = 1;
         }
 
+        function randomHex(n) {
+            const bytes = new Uint8Array(Math.ceil(n / 2));
+            if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(bytes);
+            else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+            return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('').slice(0, n);
+        }
+
         function ensureClientId() {
+            let changed = false;
             if (!formData['CLIENT_ID']) {
                 formData['CLIENT_ID'] = (window.crypto && crypto.randomUUID)
                     ? crypto.randomUUID()
                     : 'c' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
-                localStorage.setItem('blacklakeFormData', JSON.stringify(formData));
+                changed = true;
             }
+            // Zufälliger 8-stelliger Sitzungscode, wird als P00_TOKEN gespeichert
+            if (!formData['SESSION_CODE']) {
+                formData['SESSION_CODE'] = randomHex(8);
+                changed = true;
+            }
+            if (changed) store.set(JSON.stringify(formData));
         }
 
         function codeOf(list, value) { const i = list.indexOf(value); return i >= 0 ? i + 1 : MISSING; }
@@ -2048,7 +2070,7 @@
             const rank = Array.isArray(fd['C00_RANK']) ? fd['C00_RANK'] : [];
 
             row.WAVE = WAVE;
-            row.P00_TOKEN = text(fd['ACCESS_CODE']);
+            row.P00_TOKEN = text(fd['SESSION_CODE']);
             row.A01 = fd['A01'] === 'Ja' ? 1 : 0;
             row.SYS_ORDER = rank.join('-');
             row.SYS_DUR = (start && !isNaN(start)) ? Math.round((now - start) / 6000) / 10 : '';
@@ -2165,7 +2187,7 @@
                 const json = await res.json();
                 if (json.result !== 'success') throw new Error(json.error || 'Unbekannter Serverfehler');
                 submitted = true;
-                localStorage.removeItem('blacklakeFormData');
+                store.clear();
                 setCompletionState('success');
             } catch (err) {
                 const msg = err.name === 'AbortError' ? 'Zeitüberschreitung (keine Antwort vom Server)' : (err.message || String(err));
